@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Outlet } from "react-router-dom";
 import TopNavBar from "@/components/TopNavBar";
+import Footer from "@/components/Footer";
 import PoetHeroBanner from "@/pages/user/poetdetail/PoetHeroBanner";
-import PoetTabNav from "@/pages/user/poetdetail/PoetTabNav";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PoetService, Poet } from "@/lib/api/poets";
 import { Loader2 } from "lucide-react";
@@ -14,15 +14,6 @@ const PoetProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const { t, isUrdu } = useLanguage();
-
-  // Determine active tab from location
-  const getActiveTab = () => {
-    const path = location.pathname.split("/").pop();
-    if (path === id) return "all";
-    return path || "all";
-  };
-
-  const activeTab = getActiveTab();
 
   useEffect(() => {
     const fetchPoet = async () => {
@@ -75,7 +66,6 @@ const PoetProfile = () => {
     <div className="min-h-screen bg-white">
       <TopNavBar />
       <PoetHeroBanner poet={poet} />
-      {/* <PoetTabNav activeTab={activeTab} /> */}
 
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="flex gap-8">
@@ -90,6 +80,7 @@ const PoetProfile = () => {
           </div>
         </div>
       </div>
+      {/* <Footer /> */}
     </div>
   );
 };

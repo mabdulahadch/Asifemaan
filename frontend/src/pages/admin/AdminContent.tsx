@@ -43,6 +43,7 @@ interface ContentItem {
     youtubeLink: string | null;
     audioFile: string | null;
     coverImage: string | null;
+    mediaFiles?: string | null;
     isFeatured: number;
 }
 
@@ -54,6 +55,7 @@ const emptyForm = {
     youtubeLink: "",
     audioFile: "",
     coverImage: "",
+    mediaFiles: [] as string[],
     isFeatured: false,
 };
 
@@ -130,6 +132,7 @@ const AdminContent = () => {
             youtubeLink: item.youtubeLink || "",
             audioFile: item.audioFile || "",
             coverImage: item.coverImage || "",
+            mediaFiles: item.mediaFiles ? JSON.parse(item.mediaFiles) : [],
             isFeatured: item.isFeatured === 1,
         });
         setPdfFileObj(null);
@@ -150,6 +153,7 @@ const AdminContent = () => {
             formData.append("type", form.type);
             formData.append("textContent", form.textContent);
             formData.append("youtubeLink", form.youtubeLink);
+            formData.append("mediaFiles", JSON.stringify(form.mediaFiles || []));
             formData.append("isFeatured", form.isFeatured ? "1" : "0");
 
             // Attach the actual PDF file if selected
@@ -212,6 +216,32 @@ const AdminContent = () => {
 
         setError("");
         setPdfFileObj(file);
+    };
+
+    const handleSherImagesSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files) return;
+
+        const promises = Array.from(files).map((file) => {
+            return new Promise<string>((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    resolve(reader.result as string);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        });
+
+        try {
+            const base64Images = await Promise.all(promises);
+            setForm((prev: any) => ({
+                ...prev,
+                mediaFiles: [...(prev.mediaFiles || []), ...base64Images]
+            }));
+        } catch (error) {
+            setError("Failed to process images");
+        }
     };
 
     const handleDelete = async (id: number) => {
@@ -315,7 +345,7 @@ const AdminContent = () => {
                                                         {item.title}
                                                         {item.isFeatured === 1 && (
                                                             <span className="ml-2 inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
-                                                                <Star className="h-4 w-4 text-amber-500"/>Featured
+                                                                <Star className="h-4 w-4 text-amber-500" />Featured
                                                             </span>
                                                         )}
                                                     </td>
@@ -385,9 +415,22 @@ const AdminContent = () => {
                             </Select>
                         </div>
 
+                        <div className="flex items-center gap-2 mb-4">
+                            <input
+                                type="checkbox"
+                                id="isFeatured"
+                                checked={form.isFeatured as boolean}
+                                onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                            />
+                            <Label htmlFor="isFeatured" className="flex items-center gap-1.5 cursor-pointer font-bold">
+                                Mark as Featured (Shows on Home Page)
+                            </Label>
+                        </div>
+
                         {/* Dynamic Fields based on Type */}
                         {(form.type === "GHAZAL" || form.type === "NAZM" || form.type === "SHER") && (
-                            <>
+                            <div className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="textContent">Text Content</Label>
                                     <textarea
@@ -398,20 +441,37 @@ const AdminContent = () => {
                                         placeholder="Enter poetry text..."
                                     />
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <input
-                                        type="checkbox"
-                                        id="isFeatured"
-                                        checked={form.isFeatured as boolean}
-                                        onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
-                                        className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                    />
-                                    <Label htmlFor="isFeatured" className="flex items-center gap-1.5 cursor-pointer">
-                                        {/* <Star className="h-4 w-4 text-amber-500" /> */}
-                                        Mark as Featured
-                                    </Label>
-                                </div>
-                            </>
+                                {form.type === "SHER" && (
+                                    <div className="space-y-2 border p-4 rounded-md bg-muted/20">
+                                        <Label htmlFor="mediaFiles">Sher Images (Multiple)</Label>
+                                        <Input
+                                            id="mediaFiles"
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            onChange={handleSherImagesSelect}
+                                            className="bg-white"
+                                        />
+                                        <p className="text-xs text-muted-foreground">Select multiple images to attach to this Sher. These will be uploaded as base64 and shown in a gallery.</p>
+                                        {form.mediaFiles && (form.mediaFiles as string[]).length > 0 && (
+                                            <div className="flex gap-2 flex-wrap mt-2">
+                                                {(form.mediaFiles as string[]).map((src: string, i: number) => (
+                                                    <div key={i} className="relative group">
+                                                        <img src={src} alt="Preview" className="h-16 w-16 object-cover rounded border" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setForm((prev: any) => ({ ...prev, mediaFiles: prev.mediaFiles.filter((_: any, idx: number) => idx !== i) }))}
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            <Trash2 className="h-3 w-3" />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         )}
 
                         {form.type === "EBOOK" && (

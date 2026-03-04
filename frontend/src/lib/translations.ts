@@ -28,6 +28,9 @@ export const translations: Record<string, Record<Language, string>> = {
 
     // Featured Content
     featuredPoetry: { en: "Featured Poetry", ur: "نمایاں شاعری", hi: "विशेष कविता" },
+    featuredEbooks: { en: "Featured E-Books", ur: "نمایاں ای بُک", hi: "विशेष ई-पुस्तकें" },
+    featuredVideos: { en: "Featured Videos", ur: "نمایاں ویڈیوز", hi: "विशेष वीडियो" },
+    featuredAudios: { en: "Featured Audios", ur: "نمایاں آڈیوز", hi: "विशेष ऑडियो" },
     topShers: { en: "Top Shers", ur: "بہترین اشعار", hi: "शीर्ष शेर" },
     topGhazals: { en: "Top Ghazals", ur: "بہترین غزلیں", hi: "शीर्ष ग़ज़लें" },
     readMore: { en: "Read More", ur: "مزید پڑھیں", hi: "और पढ़ें" },

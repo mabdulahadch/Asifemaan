@@ -42,6 +42,15 @@ const SherDetailView = () => {
 
     const couplets = sher.textContent?.split("\n\n") || [];
 
+    let parsedMediaFiles: string[] = [];
+    try {
+        if (sher.mediaFiles) {
+            parsedMediaFiles = JSON.parse(sher.mediaFiles);
+        }
+    } catch (e) {
+        console.error("Failed to parse media files", e);
+    }
+
     return (
         <div>
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4 text-rekhta-muted hover:text-rekhta-light">
@@ -55,7 +64,7 @@ const SherDetailView = () => {
                 </h2>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6 mb-8">
                 {couplets.map((couplet, i) => (
                     <div key={i} className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-5">
                         <pre
@@ -67,6 +76,26 @@ const SherDetailView = () => {
                     </div>
                 ))}
             </div>
+
+            {parsedMediaFiles.length > 0 && (
+                <div className="mb-8 overflow-hidden">
+                    <h3 className="mb-4 text-lg font-medium text-rekhta-gold">
+                        {isUrdu ? "تصاویر" : "Images"}
+                    </h3>
+                    {/* Horizontal scrollable image gallery */}
+                    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                        {parsedMediaFiles.map((src, i) => (
+                            <img
+                                key={i}
+                                src={src}
+                                alt={`Sher image ${i + 1}`}
+                                className="h-64 w-auto shrink-0 snap-center rounded-lg border border-rekhta-border/50 object-cover shadow-sm md:h-80"
+                                loading="lazy"
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
 
             <div className="mt-6 flex items-center gap-3">
                 <Button

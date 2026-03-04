@@ -12,6 +12,7 @@ export interface Content {
     coverImage: string | null;
     youtubeLink: string | null;
     audioFile: string | null;
+    mediaFiles?: string | null;
     isFeatured?: number;
     createdAt: string;
     updatedAt: string;

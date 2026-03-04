@@ -14,7 +14,10 @@ const FeaturedContent = () => {
         const fetchFeatured = async () => {
             try {
                 const data = await ContentService.getFeaturedContent();
-                setItems(data);
+                const poetryOnly = data.filter(item =>
+                    item.type === "GHAZAL" || item.type === "NAZM" || item.type === "SHER"
+                );
+                setItems(poetryOnly);
             } catch (err) {
                 console.error("Failed to fetch featured content:", err);
             } finally {
@@ -56,14 +59,14 @@ const FeaturedContent = () => {
     const contentRoute = item.type === "SHER" ? "sher" : item.type === "GHAZAL" ? "ghazal" : item.type === "NAZM" ? "nazm" : "ghazal";
 
     return (
-        <section className="relative bg-gradient-to-b from-white to-gray-50 py-10">
+        <section className="relative bg-white py-10">
             <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
                 {/* Section Title */}
                 <div className="mb-8 text-center">
                     <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
                         {t("featuredPoetry")}
                     </h2>
-                     <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
+                    <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
                 </div>
 
                 {/* Carousel Content */}
@@ -97,8 +100,8 @@ const FeaturedContent = () => {
                         <div className="mb-6">
                             <p
                                 className={`leading-loose text-foreground ${isUrdu
-                                        ? "font-nastaliq text-xl sm:text-2xl"
-                                        : "text-lg italic sm:text-xl"
+                                    ? "font-nastaliq text-xl sm:text-2xl"
+                                    : "text-lg italic sm:text-xl"
                                     }`}
                             >
                                 {item.title}
@@ -107,8 +110,8 @@ const FeaturedContent = () => {
                             {item.textContent && (
                                 <p
                                     className={`mt-4 leading-relaxed text-rekhta-muted ${isUrdu
-                                            ? "font-nastaliq text-lg"
-                                            : "text-base italic"
+                                        ? "font-nastaliq text-lg"
+                                        : "text-base italic"
                                         }`}
                                 >
                                     {item.textContent.length > 200
@@ -137,8 +140,8 @@ const FeaturedContent = () => {
                                     key={i}
                                     onClick={() => setCurrent(i)}
                                     className={`h-2 rounded-full transition-all duration-300 ${i === current
-                                            ? "w-6 bg-rekhta-gold"
-                                            : "w-2 bg-rekhta-border hover:bg-rekhta-muted"
+                                        ? "w-6 bg-rekhta-gold"
+                                        : "w-2 bg-rekhta-border hover:bg-rekhta-muted"
                                         }`}
                                     aria-label={`Go to item ${i + 1}`}
                                 />

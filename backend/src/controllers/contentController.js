@@ -48,7 +48,7 @@ const getContentById = async (req, res, next) => {
 
 const createContent = async (req, res, next) => {
     try {
-        const { poetId, title, type, textContent, youtubeLink, isFeatured } = req.body;
+        const { poetId, title, type, textContent, youtubeLink, isFeatured, mediaFiles } = req.body;
 
         // Verify poet exists
         const [poet] = await pool.execute("SELECT id FROM Poet WHERE id = ?", [poetId]);
@@ -78,8 +78,8 @@ const createContent = async (req, res, next) => {
         }
 
         const [result] = await pool.execute(
-            `INSERT INTO Content (poetId, title, type, textContent, pdfFile, youtubeLink, audioFile, coverImage, isFeatured)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO Content (poetId, title, type, textContent, pdfFile, youtubeLink, audioFile, coverImage, isFeatured, mediaFiles)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 poetId,
                 title,
@@ -90,6 +90,7 @@ const createContent = async (req, res, next) => {
                 audioFileUrl,
                 coverImageUrl,
                 isFeatured === "1" ? 1 : 0,
+                mediaFiles || null,
             ]
         );
 
@@ -107,7 +108,7 @@ const createContent = async (req, res, next) => {
 
 const updateContent = async (req, res, next) => {
     try {
-        const { title, type, textContent, youtubeLink, isFeatured } = req.body;
+        const { title, type, textContent, youtubeLink, isFeatured, mediaFiles } = req.body;
 
         const [existing] = await pool.execute("SELECT * FROM Content WHERE id = ?", [req.params.id]);
         if (existing.length === 0) {
@@ -138,6 +139,10 @@ const updateContent = async (req, res, next) => {
         if (isFeatured !== undefined) {
             updates.push("isFeatured = ?");
             params.push(isFeatured === "1" ? 1 : 0);
+        }
+        if (mediaFiles !== undefined) {
+            updates.push("mediaFiles = ?");
+            params.push(mediaFiles || null);
         }
 
         // --- Handle Files ---

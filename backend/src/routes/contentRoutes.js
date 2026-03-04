@@ -9,7 +9,10 @@ const router = express.Router();
 // Multer config: store files in memory buffer (for FTP upload)
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max
+    limits: {
+        fileSize: 50 * 1024 * 1024, // 50MB max for files
+        fieldSize: 50 * 1024 * 1024 // 50MB max for text fields (like base64 JSON)
+    },
     fileFilter: (req, file, cb) => {
         if (
             file.mimetype === "application/pdf" ||
