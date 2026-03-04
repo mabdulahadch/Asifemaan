@@ -1,0 +1,225 @@
+/* Font Imports */
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap'); */
+
+/* Color Variables */
+/* :root {
+    --background: 0 0% 100%;
+    --foreground: 220 20% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+
+    --primary: 42 70% 55%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 10%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 20% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 42 70% 55%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 14% 98%;
+    --sidebar-foreground: 240 5% 26%;
+    --sidebar-primary: 42 70% 55%;
+    --sidebar-primary-foreground: 0 0% 98%; */
+    /* --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 5% 26%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 42 70% 55%; */
+
+    /* Custom Rekhta tokens (Light Theme Adjustments)
+    --rekhta-dark: 220 20% 98%;
+    /* Was dark, now light for background needs */
+    /* --rekhta-darker: 220 22% 95%;
+    --rekhta-card: 0 0% 100%;
+    --rekhta-border: 220 15% 90%;
+    --rekhta-gold: 42 70% 55%;
+    --rekhta-green: 160 50% 42%;
+    --rekhta-red: 0 65% 50%;
+    --rekhta-light: 220 20% 10%; */ 
+    /* Was light text, now dark text */
+    /* --rekhta-muted: 220 10% 60%; */
+/* } */
+
+
+/* ===============================
+   Google Font Imports
+================================= */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap');
+
+
+/* ===============================
+   Root Theme Variables
+================================= */
+:root {
+
+    /* Base Layout */
+    --background: 0 0% 100%;
+    --foreground: 220 20% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 42 48% 57%;
+
+    --radius: 0.5rem;
+
+
+    /* ===============================
+       Primary Design Colors
+       (Adjusted to match screenshot)
+    ================================= */
+
+    --primary: 42 48% 57%;              /* #C6A75E (Soft Gold) */
+    --primary-foreground: 0 0% 7%;      /* #121212 */
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 10%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 46%;
+
+    --accent: 220 14% 96%;
+    --accent-foreground: 220 20% 10%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+
+    /* ===============================
+       Header Specific Colors
+       (From Screenshot)
+    ================================= */
+
+    --header-logo: 42 48% 57%;          /* #C6A75E */
+    --header-menu: 40 28% 89%;          /* #EAE6DC */
+    --header-hover: 40 49% 67%;         /* #D7BD79 */
+    --header-active-bg: 42 48% 57%;     /* #C6A75E */
+    --header-active-text: 0 0% 7%;      /* #121212 */
+    --header-divider: 42 48% 57% / 0.28; /* rgba(198,167,94,0.28) */
+
+
+    /* ===============================
+       Rekhta Custom Tokens
+    ================================= */
+
+    --rekhta-background: 0 0% 100%;
+    --rekhta-card: 0 0% 100%;
+    --rekhta-border: 220 15% 90%;
+
+    --rekhta-gold: 42 48% 57%;
+    --rekhta-gold-hover: 40 49% 67%;
+
+    --rekhta-green: 160 50% 42%;
+    --rekhta-red: 0 65% 50%;
+
+    --rekhta-text: 0 0% 7%;
+    --rekhta-muted: 220 10% 60%;
+
+    --rekhta-divider: 42 48% 57% / 0.28;
+
+
+    /* ===============================
+       Sidebar
+    ================================= */
+
+    --sidebar-background: 220 14% 98%;
+    --sidebar-foreground: 240 5% 26%;
+
+    --sidebar-primary: 42 48% 57%;
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 5% 96%;
+    --sidebar-accent-foreground: 240 5% 26%;
+
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 42 48% 57%;
+}
+
+
+/* ===============================
+   Global Styling
+================================= */
+
+/* body {
+    font-family: 'Outfit', sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    margin: 0;
+    padding: 0;
+} */
+
+
+/* ===============================
+   Header Utility Classes
+================================= */
+
+/* .header-logo {
+    color: hsl(var(--header-logo));
+}
+
+.header-link {
+    color: hsl(var(--header-menu));
+    transition: 0.3s ease;
+}
+
+.header-link:hover {
+    color: hsl(var(--header-hover));
+}
+
+.header-link.active {
+    background: hsl(var(--header-active-bg));
+    color: hsl(var(--header-active-text));
+    padding: 6px 12px;
+    border-radius: var(--radius);
+}
+
+.header-divider {
+    border-bottom: 1px solid hsl(var(--header-divider));
+} */
+
+
+/* ===============================
+   Divider Utility
+================================= */
+
+/* .rekhta-divider { */
+    /* border-color: hsl(var(--rekhta-divider));
+} */
+
+
+/* ===============================
+   Urdu Text Styling
+================================= */
+
+/* .urdu-text {
+    font-family: 'Noto Nastaliq Urdu', serif;
+}
+
+.devanagari-text {
+    font-family: 'Noto Sans Devanagari', sans-serif;
+} */
