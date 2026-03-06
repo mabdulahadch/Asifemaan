@@ -1,0 +1,27 @@
+RewriteEngine On
+
+# ─── Security: Block direct access to sensitive files ────
+<Files .env>
+    Order allow,deny
+    Deny from all
+</Files>
+
+<FilesMatch "\.(php)$">
+    # Allow only api/*.php to be accessed directly
+</FilesMatch>
+
+# Block access to config, helpers, vendor directories
+RewriteRule ^config/ - [F,L]
+RewriteRule ^helpers/ - [F,L]
+RewriteRule ^vendor/ - [F,L]
+
+# ─── CORS preflight ─────────────────────────────────────
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^api/ api/cors_preflight.php [QSA,L]
+
+# ─── API Routing ────────────────────────────────────────
+RewriteRule ^api/auth(/.*)?$       api/auth.php [QSA,L]
+RewriteRule ^api/poets(/.*)?$      api/poets.php [QSA,L]
+RewriteRule ^api/content(/.*)?$    api/content.php [QSA,L]
+RewriteRule ^api/favourites(/.*)?$ api/favourites.php [QSA,L]
+RewriteRule ^api/settings(/.*)?$   api/settings.php [QSA,L]

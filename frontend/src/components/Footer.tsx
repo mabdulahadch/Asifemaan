@@ -25,11 +25,19 @@ const Footer = () => {
                     {/* Logo & Copyright */}
                     <div className="flex flex-col items-center md:items-start gap-3">
                         <Link to="/" className="flex items-center gap-2">
-                            <img
-                                src="/dist/assets/siteLogo.png"
-                                alt="Asifemaan"
-                                className="h-12 w-auto opacity-90 grayscale-[0.2]"
-                            />
+                            {settings?.logo ? (
+                                <img
+                                    src={settings.logo}
+                                    alt="Site Logo"
+                                    className="h-12 w-auto opacity-90 grayscale-[0.2] object-contain"
+                                />
+                            ) : (
+                                <img
+                                    src="/assets/siteLogo.png"
+                                    alt="Asifemaan"
+                                    className="h-12 w-auto opacity-90 grayscale-[0.2]"
+                                />
+                            )}
                         </Link>
                         <p className="text-sm font-medium text-rekhta-muted">
                             © {new Date().getFullYear()} Asifemaan. {t("allRightsReserved")}

@@ -1,6 +1,7 @@
+import { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { BookOpen, Users, LogOut, Home, Settings } from "lucide-react";
-import poetLogo from "../../../dist/assets/siteLogo.png"
+// import poetLogo from "../../../dist/assets/siteLogo.png"
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
@@ -11,17 +12,42 @@ const navItems = [
 
 const AdminLayout = () => {
     const { logout } = useAuth();
+    const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL}/settings`);
+                const json = await res.json();
+                if (json.success && json.data?.logo) {
+                    setLogoUrl(json.data.logo);
+                }
+            } catch (err) {
+                console.error("Failed to fetch settings for admin logo", err);
+            }
+        };
+        fetchSettings();
+    }, []);
+
     return (
         <div className="flex min-h-screen bg-background text-foreground">
             {/* Sidebar */}
             <aside className="w-64 border-r border-border bg-card flex flex-col shrink-0">
 
                 <div className="flex items-center justify-center max-w-[90px] border-b mx-auto">
-                    <img
-                        src={poetLogo}
-                        alt="Site Logo"
-                        className="h-30 w-auto object-contain"
-                    />
+                    {logoUrl ? (
+                        <img
+                            src={logoUrl}
+                            alt="Site Logo"
+                            className="h-30 w-auto object-contain"
+                        />
+                    ) : (
+                        <img
+                            src="/assets/siteLogo.png"
+                            alt="Site Logo Default"
+                            className="h-30 w-auto object-contain"
+                        />
+                    )}
                 </div>
                 <nav className="flex-1 p-4 space-y-1">
                     {navItems.map(({ to, label, icon: Icon }) => (

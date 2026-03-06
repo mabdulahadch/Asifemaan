@@ -28,6 +28,7 @@ const TopNavBar = () => {
   const location = useLocation();
   const { id = "1" } = useParams(); // Default to poet ID 1 for Home/global context
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCounts = async () => {
@@ -45,6 +46,24 @@ const TopNavBar = () => {
         console.error("Failed to fetch content counts:", err);
       }
     };
+
+    // Fetch global settings for logo
+    const fetchSettings = async () => {
+      try {
+        // We can just use standard fetch since there's no dedicated general service yet,
+        // or re-use any existing configured axios instance.
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/settings`);
+        const json = await res.json();
+        if (json.success && json.data?.logo) {
+          setLogoUrl(json.data.logo);
+        }
+      } catch (err) {
+        console.error("Failed to fetch settings for logo", err);
+      }
+    };
+
+    fetchSettings();
+
     // Fetch counts only if we're on a public route where tabs will be shown
     if (!location.pathname.startsWith("/admin") && !location.pathname.startsWith("/login")) {
       fetchCounts();
@@ -83,11 +102,19 @@ const TopNavBar = () => {
         {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
           <Link to="/" className="flex items-center gap-2">
-            <img
-              src="/dist/assets/siteLogo.png"
-              alt="Asifemaan"
-              className="h-12 w-auto"
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt="Site Logo"
+                className="h-12 w-auto object-contain"
+              />
+            ) : (
+              <img
+                src="/assets/siteLogo.png"
+                alt="Asifemaan Default"
+                className="h-12 w-auto"
+              />
+            )}
           </Link>
         </div>
 

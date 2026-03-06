@@ -33,16 +33,6 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {
-    console.log(`
-  ╔═══════════════════════════════════════════════╗
-  ║                                               ║
-  ║   🌟 Asifemaan Backend Server                 ║
-  ║                                               ║
-  ║   Port:        ${PORT}                           ║
-  ║                                               ║
-  ╚═══════════════════════════════════════════════╝
-  `);
-});
+app.listen(PORT, () => {});
 
 module.exports = app;

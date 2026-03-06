@@ -40,6 +40,10 @@ const AdminSiteSettings = () => {
     // New banners pending upload
     const [newBanners, setNewBanners] = useState<File[]>([]);
 
+    // Logo state
+    const [existingLogo, setExistingLogo] = useState<string | null>(null);
+    const [newLogo, setNewLogo] = useState<File | null>(null);
+
     const token = localStorage.getItem("token");
 
     useEffect(() => {
@@ -56,6 +60,8 @@ const AdminSiteSettings = () => {
                         twitterUrl: data.twitterUrl || "",
                         banners: data.banners || null,
                     });
+                    setExistingLogo(data.logo || null);
+
                     if (data.banners) {
                         try {
                             const parsed = JSON.parse(data.banners);
@@ -83,6 +89,15 @@ const AdminSiteSettings = () => {
         setNewBanners(prev => [...prev, ...newFilesArray]);
     };
 
+    const handleLogoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+        const file = files[0];
+        if (file.type.startsWith("image/")) {
+            setNewLogo(file);
+        }
+    };
+
     const handleSave = async () => {
         setSaving(true);
         setError("");
@@ -101,6 +116,10 @@ const AdminSiteSettings = () => {
             newBanners.forEach(file => {
                 formData.append("banners", file);
             });
+
+            if (newLogo) {
+                formData.append("logo", newLogo);
+            }
 
             const config = {
                 headers: {
@@ -122,14 +141,18 @@ const AdminSiteSettings = () => {
 
             setSuccessMsg("Settings saved successfully.");
             setNewBanners([]);
+            setNewLogo(null);
 
-            if (updatedData && updatedData.banners) {
-                try {
-                    const parsed = JSON.parse(updatedData.banners);
-                    if (Array.isArray(parsed)) {
-                        setExistingBanners(parsed);
-                    }
-                } catch (e) { }
+            if (updatedData) {
+                setExistingLogo(updatedData.logo || null);
+                if (updatedData.banners) {
+                    try {
+                        const parsed = JSON.parse(updatedData.banners);
+                        if (Array.isArray(parsed)) {
+                            setExistingBanners(parsed);
+                        }
+                    } catch (e) { }
+                }
             }
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to save settings.");
@@ -221,6 +244,45 @@ const AdminSiteSettings = () => {
                             />
                         </div>
                     </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                        <Upload className="h-5 w-5 text-primary" /> Site Logo
+                    </CardTitle>
+                    <CardDescription>Upload the primary site logo (used in navbar and admin panel).</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="logoUpload">Upload New Logo</Label>
+                        <Input
+                            id="logoUpload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleLogoSelect}
+                            className="bg-white"
+                        />
+                    </div>
+
+                    {(existingLogo || newLogo) && (
+                        <div className="space-y-3">
+                            <Label>Current Logo Preview</Label>
+                            <div className="w-48 h-24 relative rounded-md border border-border bg-muted/20 flex items-center justify-center p-2">
+                                <img
+                                    src={newLogo ? URL.createObjectURL(newLogo) : (existingLogo || "")}
+                                    alt="Site Logo"
+                                    className="max-w-full max-h-full object-contain"
+                                />
+                                {newLogo && (
+                                    <div className="absolute inset-x-0 bottom-0 bg-primary/80 p-1 text-xs text-primary-foreground text-center truncate">
+                                        Pending Save
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
 
