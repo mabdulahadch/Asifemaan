@@ -1,11 +1,10 @@
-import TopNavBar from "@/components/TopNavBar";
+import TopNavBar from "@/pages/user/poetdetail/TopNavBar";
 import HeroBannerCarousel from "@/pages/user/home/HeroBannerCarousel";
 import FeaturedContent from "@/pages/user/home/FeaturedContent";
 import FeaturedEbooks from "@/pages/user/home/FeaturedEbooks";
 import FeaturedVideo from "@/pages/user/home/FeaturedVideo";
 import FeaturedAudio from "@/pages/user/home/FeaturedAudio";
 
-import PoetTabNav from "./poetdetail/PoetTabNav";
 import Footer from "@/components/Footer";
 
 const Home = () => {
@@ -19,8 +18,8 @@ const Home = () => {
             <HeroBannerCarousel />
 
             {/* Featured Poetry Content */}
-            <FeaturedContent /> 
-            
+            <FeaturedContent />
+
             {/* <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="h-px bg-gradient-to-r from-transparent via-rekhta-gold/40 to-transparent" />
             </div> */}
@@ -35,13 +34,13 @@ const Home = () => {
             {/* Video */}
             <FeaturedVideo />
 
-      
+
 
 
 
 
             {/* Divider */}
-           
+
             {/* <PoetSection/> */}
 
             {/* ---------- OR ---------- */}

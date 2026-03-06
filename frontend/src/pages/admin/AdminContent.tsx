@@ -73,10 +73,10 @@ const AdminContent = () => {
     const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
     const [uploadProgress, setUploadProgress] = useState(0);
 
-    // Holds the actual File objects for upload
     const [pdfFileObj, setPdfFileObj] = useState<File | null>(null);
     const [audioFileObj, setAudioFileObj] = useState<File | null>(null);
     const [coverImageFileObj, setCoverImageFileObj] = useState<File | null>(null);
+    const [mediaFilesObj, setMediaFilesObj] = useState<File[]>([]);
 
     const token = localStorage.getItem("token");
 
@@ -119,6 +119,8 @@ const AdminContent = () => {
         setForm(emptyForm);
         setPdfFileObj(null);
         setAudioFileObj(null);
+        setCoverImageFileObj(null);
+        setMediaFilesObj([]);
         setDialogOpen(true);
     };
 
@@ -138,6 +140,7 @@ const AdminContent = () => {
         setPdfFileObj(null);
         setAudioFileObj(null);
         setCoverImageFileObj(null);
+        setMediaFilesObj([]);
         setDialogOpen(true);
     };
 
@@ -153,8 +156,12 @@ const AdminContent = () => {
             formData.append("type", form.type);
             formData.append("textContent", form.textContent);
             formData.append("youtubeLink", form.youtubeLink);
-            formData.append("mediaFiles", JSON.stringify(form.mediaFiles || []));
+            formData.append("existingMediaFiles", JSON.stringify(form.mediaFiles || []));
             formData.append("isFeatured", form.isFeatured ? "1" : "0");
+
+            mediaFilesObj.forEach(file => {
+                formData.append("mediaFiles", file);
+            });
 
             // Attach the actual PDF file if selected
             if (pdfFileObj) {
@@ -196,6 +203,7 @@ const AdminContent = () => {
             setPdfFileObj(null);
             setAudioFileObj(null);
             setCoverImageFileObj(null);
+            setMediaFilesObj([]);
             setUploadProgress(0);
             fetchContent(selectedPoetId);
         } catch (err: any) {
@@ -222,26 +230,8 @@ const AdminContent = () => {
         const files = e.target.files;
         if (!files) return;
 
-        const promises = Array.from(files).map((file) => {
-            return new Promise<string>((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    resolve(reader.result as string);
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        });
-
-        try {
-            const base64Images = await Promise.all(promises);
-            setForm((prev: any) => ({
-                ...prev,
-                mediaFiles: [...(prev.mediaFiles || []), ...base64Images]
-            }));
-        } catch (error) {
-            setError("Failed to process images");
-        }
+        const newFiles = Array.from(files);
+        setMediaFilesObj(prev => [...prev, ...newFiles]);
     };
 
     const handleDelete = async (id: number) => {
@@ -452,15 +442,30 @@ const AdminContent = () => {
                                             onChange={handleSherImagesSelect}
                                             className="bg-white"
                                         />
-                                        <p className="text-xs text-muted-foreground">Select multiple images to attach to this Sher. These will be uploaded as base64 and shown in a gallery.</p>
-                                        {form.mediaFiles && (form.mediaFiles as string[]).length > 0 && (
+                                        <p className="text-xs text-muted-foreground">Select multiple images to attach to this Sher. These will be uploaded as files and shown in a gallery.</p>
+
+                                        {((form.mediaFiles && (form.mediaFiles as string[]).length > 0) || mediaFilesObj.length > 0) && (
                                             <div className="flex gap-2 flex-wrap mt-2">
+                                                {/* Existing Images */}
                                                 {(form.mediaFiles as string[]).map((src: string, i: number) => (
-                                                    <div key={i} className="relative group">
+                                                    <div key={`existing-${i}`} className="relative group">
                                                         <img src={src} alt="Preview" className="h-16 w-16 object-cover rounded border" />
                                                         <button
                                                             type="button"
                                                             onClick={() => setForm((prev: any) => ({ ...prev, mediaFiles: prev.mediaFiles.filter((_: any, idx: number) => idx !== i) }))}
+                                                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                                        >
+                                                            <Trash2 className="h-3 w-3" />
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                                {/* New Images */}
+                                                {mediaFilesObj.map((file: File, i: number) => (
+                                                    <div key={`new-${i}`} className="relative group">
+                                                        <img src={URL.createObjectURL(file)} alt="Preview" className="h-16 w-16 object-cover rounded border" />
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setMediaFilesObj(prev => prev.filter((_, idx) => idx !== i))}
                                                             className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                                                         >
                                                             <Trash2 className="h-3 w-3" />

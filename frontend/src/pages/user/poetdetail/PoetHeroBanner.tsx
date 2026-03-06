@@ -57,7 +57,7 @@ const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
           </div>
 
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-rekhta-muted">
-            {poet.bio}
+             {poet.bio?.split('.')[0] + '.'}
           </p>
 
           <div className="mt-3 flex flex-wrap items-center justify-center gap-3 md:justify-start">

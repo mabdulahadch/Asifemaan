@@ -1,16 +1,32 @@
 import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-
-const bannerImages = [
-    "/dist/assets/banner1.jpeg",
-    "/dist/assets/banner2.png",
-    "/dist/assets/banner3.png",
-    "/dist/assets/banner4.jpeg",
-];
+import axios from "axios";
 
 const HeroBannerCarousel = () => {
+    const [bannerImages, setBannerImages] = useState<string[]>([]);
     const [current, setCurrent] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);
+
+    useEffect(() => {
+        const fetchBanners = async () => {
+            try {
+                const res = await axios.get("http://localhost:3000/api/settings");
+                if (res.data?.data?.banners) {
+                    try {
+                        const parsed = JSON.parse(res.data.data.banners);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            setBannerImages(parsed);
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse banners", e);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch banners", err);
+            }
+        };
+        fetchBanners();
+    }, []);
 
     const goTo = useCallback(
         (index: number) => {
@@ -23,18 +39,25 @@ const HeroBannerCarousel = () => {
     );
 
     const next = useCallback(() => {
+        if (bannerImages.length <= 1) return;
         goTo((current + 1) % bannerImages.length);
-    }, [current, goTo]);
+    }, [current, goTo, bannerImages.length]);
 
     const prev = useCallback(() => {
+        if (bannerImages.length <= 1) return;
         goTo((current - 1 + bannerImages.length) % bannerImages.length);
-    }, [current, goTo]);
+    }, [current, goTo, bannerImages.length]);
 
     // Auto-scroll every 3.5 seconds
     useEffect(() => {
+        if (bannerImages.length <= 1) return;
         const timer = setInterval(next, 3500);
         return () => clearInterval(timer);
-    }, [next]);
+    }, [next, bannerImages.length]);
+
+    if (bannerImages.length === 0) {
+        return null;
+    }
 
     return (
         <section className="relative w-full overflow-hidden" id="hero-banner">
@@ -61,38 +84,43 @@ const HeroBannerCarousel = () => {
             {/* Gradient overlays */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10" />
 
-            {/* Left Arrow */}
-            <button
-                onClick={prev}
-                className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/40 sm:left-5 sm:p-3"
-                aria-label="Previous slide"
-            >
-                <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-            </button>
-
-            {/* Right Arrow */}
-            <button
-                onClick={next}
-                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/40 sm:right-5 sm:p-3"
-                aria-label="Next slide"
-            >
-                <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-            </button>
-
-            {/* Dot Indicators */}
-            <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-                {bannerImages.map((_, i) => (
+            {/* Controls are only visible if there are multiple images */}
+            {bannerImages.length > 1 && (
+                <>
+                    {/* Left Arrow */}
                     <button
-                        key={i}
-                        onClick={() => goTo(i)}
-                        className={`h-2.5 rounded-full transition-all duration-300 ${i === current
-                                ? "w-8 bg-white"
-                                : "w-2.5 bg-white/50 hover:bg-white/70"
-                            }`}
-                        aria-label={`Go to slide ${i + 1}`}
-                    />
-                ))}
-            </div>
+                        onClick={prev}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/40 sm:left-5 sm:p-3"
+                        aria-label="Previous slide"
+                    >
+                        <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+
+                    {/* Right Arrow */}
+                    <button
+                        onClick={next}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/20 p-2 text-white backdrop-blur-sm transition-all hover:bg-white/40 sm:right-5 sm:p-3"
+                        aria-label="Next slide"
+                    >
+                        <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </button>
+
+                    {/* Dot Indicators */}
+                    <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+                        {bannerImages.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => goTo(i)}
+                                className={`h-2.5 rounded-full transition-all duration-300 ${i === current
+                                    ? "w-8 bg-white"
+                                    : "w-2.5 bg-white/50 hover:bg-white/70"
+                                    }`}
+                                aria-label={`Go to slide ${i + 1}`}
+                            />
+                        ))}
+                    </div>
+                </>
+            )}
         </section>
     );
 };

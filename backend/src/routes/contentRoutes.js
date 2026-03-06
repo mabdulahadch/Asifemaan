@@ -31,6 +31,8 @@ const uploadFields = upload.fields([
     { name: "pdfFile", maxCount: 1 },
     { name: "audioFile", maxCount: 1 },
     { name: "coverImage", maxCount: 1 },
+    // sher images
+    { name: "mediaFiles", maxCount: 10 }
 ]);
 
 router.get("/featured", contentController.getFeaturedContent);

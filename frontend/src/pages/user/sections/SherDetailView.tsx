@@ -64,6 +64,25 @@ const SherDetailView = () => {
                 </h2>
             </div>
 
+            {parsedMediaFiles.length > 0 && (
+                <div className="mb-8 overflow-hidden space-y-4">
+                    <h3 className="text-lg font-medium text-rekhta-gold">
+                        {isUrdu ? "تصاویر" : "Images"}
+                    </h3>
+                    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pt-2 scrollbar-hide items-center">
+                        {parsedMediaFiles.map((src, i) => (
+                            <img
+                                key={i}
+                                src={src}
+                                alt={`Sher image ${i + 1}`}
+                                className="h-60 w-auto shrink-0 snap-center rounded-lg border border-rekhta-border/50 object-cover shadow-sm md:h-80 hover:scale-[1.02] transition-transform cursor-pointer"
+                                loading={i === 0 ? "eager" : "lazy"}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
+
             <div className="space-y-6 mb-8">
                 {couplets.map((couplet, i) => (
                     <div key={i} className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-5">
@@ -76,26 +95,6 @@ const SherDetailView = () => {
                     </div>
                 ))}
             </div>
-
-            {parsedMediaFiles.length > 0 && (
-                <div className="mb-8 overflow-hidden">
-                    <h3 className="mb-4 text-lg font-medium text-rekhta-gold">
-                        {isUrdu ? "تصاویر" : "Images"}
-                    </h3>
-                    {/* Horizontal scrollable image gallery */}
-                    <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-hide">
-                        {parsedMediaFiles.map((src, i) => (
-                            <img
-                                key={i}
-                                src={src}
-                                alt={`Sher image ${i + 1}`}
-                                className="h-64 w-auto shrink-0 snap-center rounded-lg border border-rekhta-border/50 object-cover shadow-sm md:h-80"
-                                loading="lazy"
-                            />
-                        ))}
-                    </div>
-                </div>
-            )}
 
             <div className="mt-6 flex items-center gap-3">
                 <Button

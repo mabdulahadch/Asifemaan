@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFavContents, getFollowedPoets, removeFavContent, unfollowPoet } from "@/lib/api/favourites";
 import { ScriptProvider, useScript } from "@/contexts/ScriptContext";
-import TopNavBar from "@/components/TopNavBar";
+import TopNavBar from "@/pages/user/poetdetail/TopNavBar";
 import { Button } from "@/components/ui/button";
 import { Heart, UserMinus, Loader2, User, LogOut, ArrowLeft, Filter, X } from "lucide-react";
 
@@ -190,8 +190,8 @@ const UserPanelContent = () => {
                         <button
                             onClick={() => setActiveTab("favourites")}
                             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${activeTab === "favourites"
-                                    ? "border-b-2 border-rekhta-gold text-rekhta-gold"
-                                    : "text-rekhta-muted hover:text-rekhta-light"
+                                ? "border-b-2 border-rekhta-gold text-rekhta-gold"
+                                : "text-rekhta-muted hover:text-rekhta-light"
                                 }`}
                         >
                             <Heart className="h-4 w-4" />
@@ -200,8 +200,8 @@ const UserPanelContent = () => {
                         <button
                             onClick={() => setActiveTab("poets")}
                             className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${activeTab === "poets"
-                                    ? "border-b-2 border-rekhta-gold text-rekhta-gold"
-                                    : "text-rekhta-muted hover:text-rekhta-light"
+                                ? "border-b-2 border-rekhta-gold text-rekhta-gold"
+                                : "text-rekhta-muted hover:text-rekhta-light"
                                 }`}
                         >
                             <User className="h-4 w-4" />
@@ -214,8 +214,8 @@ const UserPanelContent = () => {
                         <button
                             onClick={() => setShowFilter(!showFilter)}
                             className={`flex items-center gap-1.5 px-3 py-2 rounded-md text-sm transition-colors ${showFilter || typeFilter !== "ALL"
-                                    ? "text-rekhta-gold bg-rekhta-gold/10"
-                                    : "text-rekhta-muted hover:text-rekhta-light"
+                                ? "text-rekhta-gold bg-rekhta-gold/10"
+                                : "text-rekhta-muted hover:text-rekhta-light"
                                 }`}
                         >
                             <Filter className="h-4 w-4" />
@@ -236,8 +236,8 @@ const UserPanelContent = () => {
                                     key={ct.value}
                                     onClick={() => setTypeFilter(ct.value)}
                                     className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${typeFilter === ct.value
-                                            ? "bg-rekhta-gold text-rekhta-darker"
-                                            : "border border-rekhta-border text-rekhta-muted hover:border-rekhta-gold/50 hover:text-rekhta-light"
+                                        ? "bg-rekhta-gold text-rekhta-darker"
+                                        : "border border-rekhta-border text-rekhta-muted hover:border-rekhta-gold/50 hover:text-rekhta-light"
                                         }`}
                                 >
                                     {isUrdu ? ct.labelUr : ct.labelEn}

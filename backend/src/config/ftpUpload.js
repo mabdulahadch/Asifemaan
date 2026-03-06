@@ -19,7 +19,8 @@ const uploadToSiteGround = async (fileBuffer, originalName, folder = "ebooks") =
             user: process.env.FTP_USER,
             password: process.env.FTP_PASSWORD,
             port: parseInt(process.env.FTP_PORT) || 21,
-            secure: false,
+            secure: true,
+            secureOptions: { rejectUnauthorized: false },
         });
 
         // Generate unique filename: timestamp-sanitizedOriginalName
@@ -66,7 +67,8 @@ const deleteFromSiteGround = async (publicUrl) => {
             user: process.env.FTP_USER,
             password: process.env.FTP_PASSWORD,
             port: parseInt(process.env.FTP_PORT) || 21,
-            secure: false,
+            secure: true,
+            secureOptions: { rejectUnauthorized: false },
         });
 
         // Extract the remote path from the URL

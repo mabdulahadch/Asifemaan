@@ -67,7 +67,7 @@ const TopNavBar = () => {
   const showTabs = !location.pathname.startsWith("/admin") && !location.pathname.startsWith("/login");
 
   const tabs = [
-    { id: "all", path: "", key: "all" },
+    // { id: "all", path: "", key: "all" },
     { id: "profile", path: "profile", key: "profile" },
     { id: "ghazal", path: "ghazal", key: "ghazal", count: counts.ghazal },
     { id: "nazm", path: "nazm", key: "nazm", count: counts.nazm },

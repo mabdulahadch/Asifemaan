@@ -14,6 +14,15 @@ const PoetAllView = () => {
 
     return (
         <div className="space-y-10">
+
+             {/* <div className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-6"> */}
+            <h2 className="text-lg font-semibold text-rekhta-gold">
+                {"About"}
+            </h2>
+            <p className={`leading-relaxed text-rekhta-light/80`}>
+                {poet.bio}
+            </p>
+        {/* </div> */}
             <GhazalSection poetId={poet.id} limit={3} />   {/* onSelectGhazal={(id) => navigate(`/poet/${poet.id}/ghazal/${id}`)}  */}
             <SherSection poetId={poet.id} limit={3} />
             <NazmSection poetId={poet.id} limit={3} />

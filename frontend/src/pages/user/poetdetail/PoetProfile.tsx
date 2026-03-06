@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Outlet } from "react-router-dom";
-import TopNavBar from "@/components/TopNavBar";
+import TopNavBar from "@/pages/user/poetdetail/TopNavBar";
 import Footer from "@/components/Footer";
 import PoetHeroBanner from "@/pages/user/poetdetail/PoetHeroBanner";
 import { useLanguage } from "@/contexts/LanguageContext";

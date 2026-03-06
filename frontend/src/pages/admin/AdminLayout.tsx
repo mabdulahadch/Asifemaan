@@ -1,11 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { BookOpen, Users, LogOut, Home } from "lucide-react";
+import { BookOpen, Users, LogOut, Home, Settings } from "lucide-react";
 import poetLogo from "../../../dist/assets/siteLogo.png"
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
     { to: "/admin/poets", label: "Poets", icon: Users },
     { to: "/admin/content", label: "Content", icon: BookOpen },
+    { to: "/admin/settings", label: "Site Settings", icon: Settings },
 ];
 
 const AdminLayout = () => {

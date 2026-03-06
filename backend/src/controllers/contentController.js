@@ -48,7 +48,7 @@ const getContentById = async (req, res, next) => {
 
 const createContent = async (req, res, next) => {
     try {
-        const { poetId, title, type, textContent, youtubeLink, isFeatured, mediaFiles } = req.body;
+        const { poetId, title, type, textContent, youtubeLink, isFeatured } = req.body;
 
         // Verify poet exists
         const [poet] = await pool.execute("SELECT id FROM Poet WHERE id = ?", [poetId]);
@@ -77,6 +77,15 @@ const createContent = async (req, res, next) => {
             coverImageUrl = await uploadToSiteGround(coverImage.buffer, coverImage.originalname, "covers");
         }
 
+        // Handle Sher Media Files
+        let mediaFilesUrls = [];
+        if (req.files?.mediaFiles && type === "SHER") {
+            const uploadPromises = req.files.mediaFiles.map(file =>
+                uploadToSiteGround(file.buffer, file.originalname, "sher_media")
+            );
+            mediaFilesUrls = await Promise.all(uploadPromises);
+        }
+
         const [result] = await pool.execute(
             `INSERT INTO Content (poetId, title, type, textContent, pdfFile, youtubeLink, audioFile, coverImage, isFeatured, mediaFiles)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
@@ -90,7 +99,7 @@ const createContent = async (req, res, next) => {
                 audioFileUrl,
                 coverImageUrl,
                 isFeatured === "1" ? 1 : 0,
-                mediaFiles || null,
+                mediaFilesUrls.length > 0 ? JSON.stringify(mediaFilesUrls) : null,
             ]
         );
 
@@ -108,7 +117,7 @@ const createContent = async (req, res, next) => {
 
 const updateContent = async (req, res, next) => {
     try {
-        const { title, type, textContent, youtubeLink, isFeatured, mediaFiles } = req.body;
+        const { title, type, textContent, youtubeLink, isFeatured, existingMediaFiles } = req.body;
 
         const [existing] = await pool.execute("SELECT * FROM Content WHERE id = ?", [req.params.id]);
         if (existing.length === 0) {
@@ -139,10 +148,6 @@ const updateContent = async (req, res, next) => {
         if (isFeatured !== undefined) {
             updates.push("isFeatured = ?");
             params.push(isFeatured === "1" ? 1 : 0);
-        }
-        if (mediaFiles !== undefined) {
-            updates.push("mediaFiles = ?");
-            params.push(mediaFiles || null);
         }
 
         // --- Handle Files ---
@@ -189,6 +194,51 @@ const updateContent = async (req, res, next) => {
             }
         }
 
+        // Handle Media Files Update (for Sher)
+        // We will combine any leftover existing strings with new uploads
+        if (oldRecord.type === "SHER" || type === "SHER") {
+            let finalMediaFiles = [];
+            // Parse existing kept media files
+            if (existingMediaFiles) {
+                try {
+                    const parsed = JSON.parse(existingMediaFiles);
+                    if (Array.isArray(parsed)) {
+                        finalMediaFiles = [...parsed];
+                    }
+                } catch (e) {
+                    // Ignore parse error
+                }
+            }
+
+            // Upload any new mediaFiles
+            if (req.files?.mediaFiles) {
+                const uploadPromises = req.files.mediaFiles.map(file =>
+                    uploadToSiteGround(file.buffer, file.originalname, "sher_media")
+                );
+                const newUrls = await Promise.all(uploadPromises);
+                finalMediaFiles = [...finalMediaFiles, ...newUrls];
+            }
+
+            updates.push("mediaFiles = ?");
+            params.push(finalMediaFiles.length > 0 ? JSON.stringify(finalMediaFiles) : null);
+
+            // Cleanup removed files
+            if (oldRecord.mediaFiles) {
+                try {
+                    const oldFiles = JSON.parse(oldRecord.mediaFiles);
+                    if (Array.isArray(oldFiles)) {
+                        oldFiles.forEach(url => {
+                            if (!finalMediaFiles.includes(url)) {
+                                deleteFromSiteGround(url).catch(() => { });
+                            }
+                        });
+                    }
+                } catch (e) {
+                    // Ignore
+                }
+            }
+        }
+
         if (updates.length > 0) {
             params.push(req.params.id);
             await pool.execute(
@@ -226,6 +276,14 @@ const deleteContent = async (req, res, next) => {
         }
         if (record.coverImage) {
             deleteFromSiteGround(record.coverImage).catch(() => { });
+        }
+        if (record.mediaFiles) {
+            try {
+                const mediaFiles = JSON.parse(record.mediaFiles);
+                if (Array.isArray(mediaFiles)) {
+                    mediaFiles.forEach(url => deleteFromSiteGround(url).catch(() => { }));
+                }
+            } catch (e) { }
         }
 
         await pool.execute("DELETE FROM Content WHERE id = ?", [req.params.id]);

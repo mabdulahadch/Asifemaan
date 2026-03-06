@@ -1,9 +1,22 @@
-import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Footer = () => {
     const { isUrdu } = useLanguage();
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        axios.get("http://localhost:3000/api/settings")
+            .then(res => {
+                if (res.data && res.data.data) {
+                    setSettings(res.data.data);
+                }
+            })
+            .catch(err => console.error("Failed to load footer links", err));
+    }, []);
 
     return (
         <footer className="bg-rekhta-gold/10 py-10 mt-auto border-t border-rekhta-border/30">
@@ -25,42 +38,61 @@ const Footer = () => {
 
                     {/* Social Links */}
                     <div className="flex items-center gap-4">
-                        <a
-                            href="https://facebook.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
-                            aria-label="Facebook"
-                        >
-                            <Facebook className="h-5 w-5" />
-                        </a>
-                        <a
-                            href="https://twitter.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
-                            aria-label="Twitter"
-                        >
-                            <Twitter className="h-5 w-5 fill-current" />
-                        </a>
-                        <a
-                            href="https://instagram.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
-                            aria-label="Instagram"
-                        >
-                            <Instagram className="h-5 w-5" />
-                        </a>
-                        <a
-                            href="https://linkedin.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
-                            aria-label="LinkedIn"
-                        >
-                            <Linkedin className="h-5 w-5 fill-current" />
-                        </a>
+                        {settings?.youtubeUrl && (
+                            <a
+                                href={settings.youtubeUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
+                                aria-label="YouTube"
+                            >
+                                <Youtube className="h-5 w-5" />
+                            </a>
+                        )}
+                        {settings?.facebookUrl && (
+                            <a
+                                href={settings.facebookUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
+                                aria-label="Facebook"
+                            >
+                                <Facebook className="h-5 w-5" />
+                            </a>
+                        )}
+                        {settings?.twitterUrl && (
+                            <a
+                                href={settings.twitterUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
+                                aria-label="Twitter"
+                            >
+                                <Twitter className="h-5 w-5 fill-current" />
+                            </a>
+                        )}
+                        {settings?.instagramUrl && (
+                            <a
+                                href={settings.instagramUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
+                                aria-label="Instagram"
+                            >
+                                <Instagram className="h-5 w-5" />
+                            </a>
+                        )}
+                        {settings?.linkedinUrl && (
+                            <a
+                                href={settings.linkedinUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-rekhta-muted shadow-sm transition-all hover:scale-110 hover:border-rekhta-gold hover:text-rekhta-gold border border-transparent"
+                                aria-label="LinkedIn"
+                            >
+                                <Linkedin className="h-5 w-5 fill-current" />
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>

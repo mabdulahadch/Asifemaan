@@ -15,8 +15,8 @@ import Register from "./pages/Register";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminPoets from "./pages/admin/AdminPoets";
 import AdminContent from "./pages/admin/AdminContent";
+import AdminSiteSettings from "./pages/admin/AdminSiteSettings";
 import PoetAllView from "./pages/user/poetdetail/PoetAllView";
-import PoetAboutView from "./pages/user/poetdetail/PoetAboutView";
 import GhazalSection from "./pages/user/sections/GhazalSection";
 import SherSection from "./pages/user/sections/SherSection";
 import NazmSection from "./pages/user/sections/NazmSection";
@@ -47,7 +47,7 @@ const App = () => (
               <Route path="/register" element={<Register />} />
               <Route path="/poet/:id" element={<PoetProfile />}>
                 <Route index element={<PoetAllView />} />
-                <Route path="profile" element={<PoetAboutView />} />
+                <Route path="profile" element={<PoetAllView />} />
                 <Route path="ghazal" element={<GhazalSection />} />
                 <Route path="ghazal/:contentId" element={<GhazalDetailView />} />
                 <Route path="nazm" element={<NazmSection />} />
@@ -71,6 +71,7 @@ const App = () => (
                   <Route index element={<Navigate to="/admin/poets" replace />} />
                   <Route path="poets" element={<AdminPoets />} />
                   <Route path="content" element={<AdminContent />} />
+                  <Route path="settings" element={<AdminSiteSettings />} />
                 </Route>
               </Route>
 

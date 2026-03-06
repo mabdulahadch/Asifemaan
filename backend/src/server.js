@@ -9,6 +9,7 @@ const contentRoutes = require("./routes/contentRoutes");
 const poetRoutes = require("./routes/poetRoutes");
 const favouriteRoutes = require("./routes/favouriteRoutes");
 const userRoutes = require("./routes/userRoutes");
+const settingsRoutes = require("./routes/settingsRoutes");
 
 
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api/poets", poetRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/favourites", favouriteRoutes);
+app.use("/api/settings", settingsRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
