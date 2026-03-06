@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { login as loginApi } from "@/lib/api/auth";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
@@ -18,6 +19,7 @@ const Login = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { login: authLogin } = useAuth();
+    const { t } = useLanguage();
 
     // Where to redirect after successful login
     const from = (location.state as any)?.from || "/";
@@ -56,9 +58,9 @@ const Login = () => {
         <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] bg-background p-4">
             <Card className="w-full max-w-md border-border/40 shadow-lg">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center text-primary">Welcome back</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-center text-primary">{t("welcomeBack")}</CardTitle>
                     <CardDescription className="text-center">
-                        Enter your credentials to sign in
+                        {t("enterCredentials")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -70,7 +72,7 @@ const Login = () => {
                         )}
 
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t("email")}</Label>
                             <Input
                                 id="email"
                                 type="email"
@@ -81,12 +83,6 @@ const Login = () => {
                             />
                         </div>
                         <div className="space-y-2">
-                            {/* <div className="flex items-center justify-between">
-                                <Label htmlFor="password">Password</Label>
-                                <Link to="#" className="text-sm text-muted-foreground hover:text-primary">
-                                    Forgot password?
-                                </Link>
-                            </div> */}
                             <div className="relative">
                                 <Input
                                     id="password"
@@ -109,14 +105,14 @@ const Login = () => {
                             </div>
                         </div>
                         <Button type="submit" className="w-full" disabled={loading}>
-                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Sign In"}
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t("signIn")}
                         </Button>
                     </form>
                 </CardContent>
                 <CardFooter className="flex justify-center text-sm text-muted-foreground">
-                    Don't have an account?{" "}
+                    {t("dontHaveAccount")}{" "}
                     <Link to="/register" className="ml-1 font-medium text-primary hover:underline">
-                        Sign up
+                        {t("signUp")}
                     </Link>
                 </CardFooter>
             </Card>

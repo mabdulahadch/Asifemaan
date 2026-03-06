@@ -6,6 +6,7 @@ import PoetHeroBanner from "@/pages/user/poetdetail/PoetHeroBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PoetService, Poet } from "@/lib/api/poets";
 import { Loader2 } from "lucide-react";
+import RightSidebar from "@/components/RightSidebar";
 
 const PoetProfile = () => {
   const { id } = useParams();
@@ -76,7 +77,7 @@ const PoetProfile = () => {
 
           {/* Sidebar - hidden on mobile */}
           <div className="hidden w-64 shrink-0 lg:block">
-            {/* <RightSidebar /> */}
+            <RightSidebar />
           </div>
         </div>
       </div>

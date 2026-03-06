@@ -11,39 +11,31 @@ const Home = () => {
 
     return (
         <div className="min-h-screen bg-background flex flex-col">
-            {/* <PoetTabNav activeTab="home" /> */}
             <TopNavBar />
 
             {/* Hero Banner Carousel */}
             <HeroBannerCarousel />
 
             {/* Featured Poetry Content */}
-            <FeaturedContent />
-
-            {/* <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div className="h-px bg-gradient-to-r from-transparent via-rekhta-gold/40 to-transparent" />
-            </div> */}
-
+            <div id="featured-poetry">
+                <FeaturedContent />
+            </div>
 
             {/* E-book */}
-            <FeaturedEbooks />
+            <div id="featured-ebooks">
+                <FeaturedEbooks />
+            </div>
 
             {/* Audio */}
-            <FeaturedAudio />
+            <div id="featured-audios">
+                <FeaturedAudio />
+            </div>
 
             {/* Video */}
-            <FeaturedVideo />
+            <div id="featured-videos">
+                <FeaturedVideo />
+            </div>
 
-
-
-
-
-
-            {/* Divider */}
-
-            {/* <PoetSection/> */}
-
-            {/* ---------- OR ---------- */}
             <Footer />
         </div>
     );

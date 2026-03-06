@@ -5,7 +5,7 @@ import { FeaturedContent as FeaturedContentType, ContentService } from "@/lib/ap
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeaturedAudio = () => {
-    const { t, isUrdu } = useLanguage();
+    const { t, transliterate } = useLanguage();
     const [audios, setAudios] = useState<FeaturedContentType[]>([]);
     const [loading, setLoading] = useState(true);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ const FeaturedAudio = () => {
                     <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
                         {t("featuredAudios")}
                     </h2>
-                     <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
+                    <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
                 </div>
 
                 <div className="relative group">
@@ -92,10 +92,10 @@ const FeaturedAudio = () => {
                                 </div>
                                 <div className="flex flex-col justify-center p-4 flex-1 bg-white">
                                     <h3 className="text-sm font-bold text-foreground leading-snug line-clamp-2 mb-1 group-hover:text-rekhta-gold transition-colors">
-                                        {audio.title}
+                                        {transliterate(audio.title)}
                                     </h3>
                                     <p className="text-xs text-rekhta-muted uppercase line-clamp-1">
-                                        {audio.penName || audio.realName}
+                                        {transliterate(audio.penName || audio.realName)}
                                     </p>
                                 </div>
                             </Link>

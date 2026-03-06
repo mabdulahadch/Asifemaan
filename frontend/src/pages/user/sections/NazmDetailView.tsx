@@ -1,5 +1,5 @@
 import { ArrowLeft, Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Content, ContentService } from "@/lib/api/content";
@@ -8,7 +8,7 @@ import { useFavouriteContent } from "@/hooks/useFavourite";
 import ShareDialog from "@/components/ShareDialog";
 
 const NazmDetailView = () => {
-    const { isUrdu } = useScript();
+    const { t, isUrdu, transliterate } = useLanguage();
     const { contentId } = useParams();
     const navigate = useNavigate();
     const [nazm, setNazm] = useState<Content | null>(null);
@@ -38,7 +38,7 @@ const NazmDetailView = () => {
         );
     }
 
-    if (!nazm) return <div className="text-rekhta-light text-center py-12">Nazm not found</div>;
+    if (!nazm) return <div className="text-rekhta-light text-center py-12">{t("nazmNotFound")}</div>;
 
     const stanzas = nazm.textContent?.split("\n\n") || [];
 
@@ -46,12 +46,12 @@ const NazmDetailView = () => {
         <div>
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4 text-rekhta-muted hover:text-rekhta-light">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {isUrdu ? "واپس" : "Back"}
+                {t("back")}
             </Button>
 
             <div className="mb-6">
                 <h2 className={`text-2xl font-bold text-rekhta-light ${isUrdu ? "font-nastaliq text-3xl" : ""}`}>
-                    {nazm.title}
+                    {transliterate(nazm.title)}
                 </h2>
             </div>
 
@@ -62,7 +62,7 @@ const NazmDetailView = () => {
                             className={`whitespace-pre-wrap leading-loose text-rekhta-light/90 ${isUrdu ? "font-nastaliq text-xl text-right" : "font-serif text-lg text-center"
                                 }`}
                         >
-                            {stanza}
+                            {transliterate(stanza)}
                         </pre>
                     </div>
                 ))}

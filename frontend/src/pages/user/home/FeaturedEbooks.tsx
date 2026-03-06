@@ -5,7 +5,7 @@ import { FeaturedContent as FeaturedContentType, ContentService } from "@/lib/ap
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeaturedEbooks = () => {
-    const { t, isUrdu } = useLanguage();
+    const { t, transliterate } = useLanguage();
     const [ebooks, setEbooks] = useState<FeaturedContentType[]>([]);
     const [loading, setLoading] = useState(true);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ const FeaturedEbooks = () => {
                     <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
                         {t("featuredEbooks")}
                     </h2>
-                     <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
+                    <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
                 </div>
 
                 <div className="relative group">
@@ -86,15 +86,15 @@ const FeaturedEbooks = () => {
                                         />
                                     ) : (
                                         <div className="bg-rekhta-card/50 h-full w-full flex items-center justify-center p-4 text-center">
-                                            <span className="text-sm text-rekhta-muted font-serif">{book.title}</span>
+                                            <span className="text-sm text-rekhta-muted font-serif">{transliterate(book.title)}</span>
                                         </div>
                                     )}
                                 </div>
                                 <h3 className="text-sm font-bold text-foreground leading-snug line-clamp-2">
-                                    {book.title}
+                                    {transliterate(book.title)}
                                 </h3>
                                 <p className="text-xs text-rekhta-muted mt-1 uppercase line-clamp-1">
-                                    {book.penName || book.realName}
+                                    {transliterate(book.penName || book.realName)}
                                 </p>
                             </Link>
                         ))}

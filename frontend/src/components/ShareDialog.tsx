@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Copy, Facebook, Linkedin, Twitter, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ShareDialogProps {
     url?: string;
@@ -17,14 +17,14 @@ interface ShareDialogProps {
 }
 
 const ShareDialog = ({ url = window.location.href, title = "Check this out!", trigger }: ShareDialogProps) => {
-    const { isUrdu } = useScript();
+    const { t } = useLanguage();
 
     const handleCopyLink = async () => {
         try {
             await navigator.clipboard.writeText(url);
-            toast.success(isUrdu ? "لنک کاپی ہو گیا!" : "Link copied to clipboard!");
+            toast.success(t("linkCopied"));
         } catch (err) {
-            toast.error(isUrdu ? "لنک کاپی کرنے میں ناکامی" : "Failed to copy link");
+            toast.error(t("failedToCopyLink"));
         }
     };
 
@@ -59,7 +59,7 @@ const ShareDialog = ({ url = window.location.href, title = "Check this out!", tr
             <DialogContent className="bg-rekhta-card border-rekhta-border text-rekhta-light sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-rekhta-gold">
-                        {isUrdu ? "شیئر کریں" : "Share"}
+                        {t("share")}
                     </DialogTitle>
                 </DialogHeader>
                 <div className="grid grid-cols-2 gap-4 py-4">
@@ -82,7 +82,7 @@ const ShareDialog = ({ url = window.location.href, title = "Check this out!", tr
                         onClick={handleCopyLink}
                     >
                         <Copy className="h-5 w-5 text-rekhta-muted" />
-                        <span>{isUrdu ? "لنک کاپی کریں" : "Copy Link"}</span>
+                        <span>{t("copyLink")}</span>
                     </Button>
                 </div>
             </DialogContent>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 import { Language, getTranslation } from "@/lib/translations";
+import { transliterate as transliterateText } from "@/lib/transliterate";
 
 interface LanguageContextType {
     language: Language;
@@ -7,6 +8,8 @@ interface LanguageContextType {
     isUrdu: boolean;
     isHindi: boolean;
     t: (key: string) => string;
+    /** Transliterate dynamic Urdu text (from DB) to the current language script */
+    transliterate: (text: string) => string;
     dir: "ltr" | "rtl";
 }
 
@@ -16,6 +19,7 @@ const LanguageContext = createContext<LanguageContextType>({
     isUrdu: false,
     isHindi: false,
     t: (key: string) => key,
+    transliterate: (text: string) => text,
     dir: "ltr",
 });
 
@@ -30,9 +34,12 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
 
     const t = (key: string): string => getTranslation(key, language);
 
+    const transliterate = (text: string): string =>
+        transliterateText(text, language);
+
     return (
         <LanguageContext.Provider
-            value={{ language, setLanguage, isUrdu, isHindi, t, dir }}
+            value={{ language, setLanguage, isUrdu, isHindi, t, transliterate, dir }}
         >
             <div dir={dir}>{children}</div>
         </LanguageContext.Provider>
@@ -49,5 +56,8 @@ export const useScript = () => {
         toggleScript: () =>
             ctx.setLanguage(ctx.language === "ur" ? "en" : "ur"),
         isUrdu: ctx.isUrdu,
+        t: ctx.t,
+        transliterate: ctx.transliterate,
+        language: ctx.language,
     };
 };

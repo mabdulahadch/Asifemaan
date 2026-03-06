@@ -5,7 +5,7 @@ import { FeaturedContent as FeaturedContentType, ContentService } from "@/lib/ap
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeaturedVideo = () => {
-    const { t, isUrdu } = useLanguage();
+    const { t, transliterate } = useLanguage();
     const [videos, setVideos] = useState<FeaturedContentType[]>([]);
     const [loading, setLoading] = useState(true);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -58,11 +58,11 @@ const FeaturedVideo = () => {
         <section className="relative bg-white py-10">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 {/* Section Title */}
-               <div className="mb-8 text-center">
+                <div className="mb-8 text-center">
                     <h2 className="text-2xl font-bold text-foreground sm:text-3xl">
                         {t("featuredVideos")}
                     </h2>
-                     <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
+                    <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-rekhta-gold" />
                 </div>
 
                 <div className="relative group">
@@ -99,7 +99,7 @@ const FeaturedVideo = () => {
                                             />
                                         ) : (
                                             <div className="bg-rekhta-card/50 h-full w-full flex items-center justify-center p-4 text-center">
-                                                <span className="text-sm text-rekhta-muted font-serif">{video.title}</span>
+                                                <span className="text-sm text-rekhta-muted font-serif">{transliterate(video.title)}</span>
                                             </div>
                                         )}
                                         {/* Play icon overlay */}
@@ -110,10 +110,10 @@ const FeaturedVideo = () => {
                                         </div>
                                     </div>
                                     <h3 className="text-base font-bold text-foreground leading-snug line-clamp-2 pr-4">
-                                        {video.title}
+                                        {transliterate(video.title)}
                                     </h3>
                                     <p className="text-sm text-rekhta-muted mt-2 font-medium">
-                                        {video.penName || video.realName}
+                                        {transliterate(video.penName || video.realName)}
                                     </p>
                                 </Link>
                             );

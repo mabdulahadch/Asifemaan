@@ -1,5 +1,5 @@
 import { Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Content, ContentService } from "@/lib/api/content";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const GhazalSection = ({ poetId: propPoetId, limit, onSelectGhazal }: Props) => {
-  const { isUrdu } = useScript();
+  const { t, isUrdu, transliterate } = useLanguage();
   const { id: urlPoetId } = useParams();
   const navigate = useNavigate();
   const poetId = propPoetId || urlPoetId;
@@ -54,7 +54,7 @@ const GhazalSection = ({ poetId: propPoetId, limit, onSelectGhazal }: Props) => 
     <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold uppercase tracking-wider text-rekhta-gold">
-          {isUrdu ? "غزل" : "Ghazal"}{" "}
+          {t("ghazal")}{" "}
           <span className="text-sm text-rekhta-muted">({ghazals.length})</span>
         </h2>
         {limit && (
@@ -62,62 +62,59 @@ const GhazalSection = ({ poetId: propPoetId, limit, onSelectGhazal }: Props) => 
             onClick={() => navigate(`/poet/${poetId}/ghazal`)}
             className="text-sm text-rekhta-gold hover:underline"
           >
-            {isUrdu ? "سب دیکھیں" : "See All"}
+            {t("seeAll")}
           </button>
         )}
       </div>
 
       {ghazals.length === 0 && !loading ? (
-        <EmptyState
-          messageEn="No ghazals available."
-          messageUr="کوئی غزل دستیاب نہیں ہے"
-        />
+        <EmptyState translationKey="noGhazals" />
       ) : (
 
-      <div className="divide-y divide-rekhta-border">
-        {displayed.map((g) => {
-          const shareUrl = `${window.location.origin}/poet/${poetId}/ghazal/${g.id}`;
-          return (
-            <div
-              key={g.id}
-              className="group flex items-center justify-between py-3 transition-colors hover:bg-rekhta-card/50"
-            >
-              <button
-                onClick={() => {
-                  if (onSelectGhazal) {
-                    onSelectGhazal(g.id);
-                  } else {
-                    navigate(`/poet/${poetId}/ghazal/${g.id}`);
-                  }
-                }}
-                className="flex-1 text-start text-rekhta-light/90 transition-colors group-hover:text-rekhta-gold"
+        <div className="divide-y divide-rekhta-border">
+          {displayed.map((g) => {
+            const shareUrl = `${window.location.origin}/poet/${poetId}/ghazal/${g.id}`;
+            return (
+              <div
+                key={g.id}
+                className="group flex items-center justify-between py-3 transition-colors hover:bg-rekhta-card/50"
               >
-                <span className={isUrdu ? "font-nastaliq text-lg" : "text-base"}>
-                  {g.title}
-                </span>
-              </button>
-
-              <div className="flex items-center gap-1">
                 <button
-                  onClick={() => toggleFav(g.id)}
-                  className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-red"
+                  onClick={() => {
+                    if (onSelectGhazal) {
+                      onSelectGhazal(g.id);
+                    } else {
+                      navigate(`/poet/${poetId}/ghazal/${g.id}`);
+                    }
+                  }}
+                  className="flex-1 text-start text-rekhta-light/90 transition-colors group-hover:text-rekhta-gold"
                 >
-                  <Heart className={`h-4 w-4 ${favIds.has(g.id) ? "fill-rekhta-red text-rekhta-red" : ""}`} />
+                  <span className={isUrdu ? "font-nastaliq text-lg" : "text-base"}>
+                    {transliterate(g.title)}
+                  </span>
                 </button>
-                <ShareDialog
-                  url={shareUrl}
-                  title={g.title}
-                  trigger={
-                    <button className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-light transition-colors">
-                      <Share2 className="h-4 w-4" />
-                    </button>
-                  }
-                />
+
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => toggleFav(g.id)}
+                    className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-red"
+                  >
+                    <Heart className={`h-4 w-4 ${favIds.has(g.id) ? "fill-rekhta-red text-rekhta-red" : ""}`} />
+                  </button>
+                  <ShareDialog
+                    url={shareUrl}
+                    title={g.title}
+                    trigger={
+                      <button className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-light transition-colors">
+                        <Share2 className="h-4 w-4" />
+                      </button>
+                    }
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );

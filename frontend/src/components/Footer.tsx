@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Footer = () => {
-    const { isUrdu } = useLanguage();
+    const { t } = useLanguage();
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const Footer = () => {
                             />
                         </Link>
                         <p className="text-sm font-medium text-rekhta-muted">
-                            © {new Date().getFullYear()} Asifemaan. {isUrdu ? "جملہ حقوق محفوظ ہیں۔" : "All rights reserved."}
+                            © {new Date().getFullYear()} Asifemaan. {t("allRightsReserved")}
                         </p>
                     </div>
 

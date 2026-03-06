@@ -1,5 +1,5 @@
 import { Play, Pause, Volume2, Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Content, ContentService } from "@/lib/api/content";
 import { Slider } from "@/components/ui/slider";
@@ -23,6 +23,7 @@ interface AudioPlayerProps {
 
 // --- Audio Player Component ---
 const AudioPlayer = ({ track, onEnded }: AudioPlayerProps) => {
+  const { transliterate } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -122,7 +123,7 @@ const AudioPlayer = ({ track, onEnded }: AudioPlayerProps) => {
           />
           <div className="flex justify-between items-center text-sm">
             <p className="truncate font-medium text-rekhta-light w-[80%]">
-              {track.title}
+              {transliterate(track.title)}
             </p>
             <Volume2 className="h-4 w-4 text-rekhta-muted" />
           </div>
@@ -134,7 +135,7 @@ const AudioPlayer = ({ track, onEnded }: AudioPlayerProps) => {
 
 // --- Main Audio Section ---
 const AudioSection = ({ poetId: propPoetId, limit }: Props) => {
-  const { isUrdu } = useScript();
+  const { t, isUrdu, transliterate } = useLanguage();
   const { id: urlPoetId } = useParams();
   const navigate = useNavigate();
   const poetId = propPoetId || urlPoetId;
@@ -201,7 +202,7 @@ const AudioSection = ({ poetId: propPoetId, limit }: Props) => {
                     }`}
                   onClick={() => setCurrentTrack(entry)}
                 >
-                  {entry.title}
+                  {transliterate(entry.title)}
                 </p>
               </div>
 
@@ -250,7 +251,7 @@ const AudioSection = ({ poetId: propPoetId, limit }: Props) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold uppercase tracking-wider text-rekhta-gold">
-          {isUrdu ? "آڈیو" : "Audio"}{" "}
+          {t("audio")}{" "}
           <span className="text-sm text-rekhta-muted">({audioList.length})</span>
         </h2>
         {limit && (
@@ -258,7 +259,7 @@ const AudioSection = ({ poetId: propPoetId, limit }: Props) => {
             onClick={() => navigate(`/poet/${poetId}/audio`)}
             className="text-sm text-rekhta-gold hover:underline"
           >
-            {isUrdu ? "سب دیکھیں" : "See All"}
+            {t("seeAll")}
           </button>
         )}
       </div>
@@ -268,16 +269,10 @@ const AudioSection = ({ poetId: propPoetId, limit }: Props) => {
       )}
 
       {audioList.length === 0 && !loading ? (
-        <EmptyState
-          messageEn="No audio available."
-          messageUr="کوئی آڈیو دستیاب نہیں ہے"
-        />
+        <EmptyState translationKey="noAudio" />
       ) : (
         renderedList
       )}
-
-
-      
     </div>
   );
 };

@@ -9,10 +9,16 @@ interface PoetHeroBannerProps {
 }
 
 const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
-  const { t, isUrdu } = useLanguage();
+  const { t, transliterate } = useLanguage();
   const { followedIds, toggleFollow } = useFollowPoet();
 
   const isFollowing = followedIds.has(poet.id);
+
+  function getFirstSentence(text) {
+  return text?.match(/.*?[.۔।]/)?.[0] || text;
+}
+
+
 
   return (
     <section className="relative border-b border-rekhta-border bg-gradient-to-b from-rekhta-gold/10 to-rekhta-gold/10 py-8 md:py-12">
@@ -36,7 +42,7 @@ const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
 
         <div className="flex-1 text-center md:text-start">
           <h1 className="font-outfit text-3xl font-bold text-foreground md:text-4xl lg:text-4xl">
-            {(poet.penName || poet.realName)
+            {transliterate((poet.penName || poet.realName) || "")
               ?.toLowerCase()
               .replace(/\b\w/g, (c) => c.toUpperCase())}
           </h1>
@@ -51,13 +57,14 @@ const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
             {poet.placeOfBirth && (
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-4 w-4" />
-                {poet.placeOfBirth}
+                {transliterate(poet.placeOfBirth)}
               </span>
             )}
           </div>
 
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-rekhta-muted">
-             {poet.bio?.split('.')[0] + '.'}
+            {/* {transliterate(poet.bio?.split('.')[0] + '.')} */}
+            {transliterate(getFirstSentence(poet.bio))}
           </p>
 
           <div className="mt-3 flex flex-wrap items-center justify-center gap-3 md:justify-start">

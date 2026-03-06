@@ -1,33 +1,49 @@
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
+
+const sidebarLinks = [
+  { key: "featuredPoetry", sectionId: "featured-poetry" },
+  { key: "featuredEbooks", sectionId: "featured-ebooks" },
+  { key: "featuredAudios", sectionId: "featured-audios" },
+  { key: "featuredVideos", sectionId: "featured-videos" },
+];
 
 const RightSidebar = () => {
-  const { isUrdu } = useScript();
+  const { t } = useLanguage();
+  const navigate = useNavigate();
 
-  const poetLinks = [
-    { roman: "Index of Poets", urdu: "شعراء کی فہرست" },
-    { roman: "Top Read Poets", urdu: "سب سے زیادہ پڑھے جانے والے" },
-    { roman: "Classical Poets", urdu: "کلاسیکی شعراء" },
-    { roman: "Women Poets", urdu: "خواتین شعراء" },
-    { roman: "Young Poets", urdu: "نوجوان شعراء" },
-    { roman: "Poet Audios", urdu: "شعراء کے آڈیو" },
-  ];
+  const handleClick = (sectionId: string) => {
+    // If already on the home page, scroll directly
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // Navigate to home first, then scroll after render
+      navigate("/");
+      setTimeout(() => {
+        const target = document.getElementById(sectionId);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 500);
+    }
+  };
 
   return (
     <aside className="space-y-6">
       {/* Poet Navigation */}
       <div className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-4">
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-rekhta-gold">
-          {isUrdu ? "شعراء" : "Poets"}
+          {t("poets")}
         </h3>
         <ul className="space-y-2">
-          {poetLinks.map((link) => (
-            <li key={link.roman}>
+          {sidebarLinks.map(({ key, sectionId }) => (
+            <li key={key}>
               <button
-                className={`text-sm text-rekhta-light/70 transition-colors hover:text-rekhta-gold ${
-                  isUrdu ? "font-nastaliq text-base" : ""
-                }`}
+                onClick={() => handleClick(sectionId)}
+                className="text-sm text-rekhta-light/70 transition-colors hover:text-rekhta-gold"
               >
-                {isUrdu ? link.urdu : link.roman}
+                {t(key)}
               </button>
             </li>
           ))}
@@ -37,12 +53,10 @@ const RightSidebar = () => {
       {/* Explore More */}
       <div className="rounded-lg border border-rekhta-border bg-gradient-to-b from-rekhta-card/30 to-rekhta-darker p-4">
         <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-rekhta-gold">
-          {isUrdu ? "مزید دریافت کریں" : "Explore More"}
+          {t("exploreMore")}
         </h3>
         <p className="text-xs leading-relaxed text-rekhta-muted">
-          {isUrdu
-            ? "اردو شاعری کی دنیا میں خوش آمدید۔ ہزاروں غزلیں، نظمیں اور اشعار پڑھیں۔"
-            : "Welcome to the world of Urdu poetry. Read thousands of ghazals, nazms, and couplets from renowned poets."}
+          {t("exploreMoreDesc")}
         </p>
       </div>
     </aside>

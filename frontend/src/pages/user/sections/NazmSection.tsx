@@ -1,5 +1,5 @@
 import { Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Content, ContentService } from "@/lib/api/content";
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const NazmSection = ({ poetId: propPoetId, limit }: Props) => {
-  const { isUrdu } = useScript();
+  const { t, isUrdu, transliterate } = useLanguage();
   const { id: urlPoetId } = useParams();
   const navigate = useNavigate();
   const poetId = propPoetId || urlPoetId;
@@ -53,7 +53,7 @@ const NazmSection = ({ poetId: propPoetId, limit }: Props) => {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold uppercase tracking-wider text-rekhta-gold">
-          {isUrdu ? "نظم" : "Nazm"}{" "}
+          {t("nazm")}{" "}
           <span className="text-sm text-rekhta-muted">({nazms.length})</span>
         </h2>
         {limit && (
@@ -61,52 +61,49 @@ const NazmSection = ({ poetId: propPoetId, limit }: Props) => {
             onClick={() => navigate(`/poet/${poetId}/nazm`)}
             className="text-sm text-rekhta-gold hover:underline"
           >
-            {isUrdu ? "سب دیکھیں" : "See All"}
+            {t("seeAll")}
           </button>
         )}
       </div>
 
-            {nazms.length === 0 && !loading ? (
-        <EmptyState
-          messageEn="No nazms available."
-          messageUr="کوئی نظم دستیاب نہیں ہے"
-        />
+      {nazms.length === 0 && !loading ? (
+        <EmptyState translationKey="noNazms" />
       ) : (
 
-      <div className="divide-y divide-rekhta-border">
-        {displayed.map((item) => (
-          <div
-            key={item.id}
-            className="group flex items-center justify-between py-3 transition-colors hover:bg-rekhta-card/50"
-          >
-            <button
-              onClick={() => navigate(`/poet/${poetId}/nazm/${item.id}`)}
-              className="flex-1 text-start text-rekhta-light/90 transition-colors group-hover:text-rekhta-gold"
+        <div className="divide-y divide-rekhta-border">
+          {displayed.map((item) => (
+            <div
+              key={item.id}
+              className="group flex items-center justify-between py-3 transition-colors hover:bg-rekhta-card/50"
             >
-              <span className={isUrdu ? "font-nastaliq text-lg" : "text-base"}>
-                {item.title}
-              </span>
-            </button>
-            <div className="flex items-center gap-1">
               <button
-                onClick={() => toggleFav(item.id)}
-                className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-red"
+                onClick={() => navigate(`/poet/${poetId}/nazm/${item.id}`)}
+                className="flex-1 text-start text-rekhta-light/90 transition-colors group-hover:text-rekhta-gold"
               >
-                <Heart className={`h-4 w-4 ${favIds.has(item.id) ? "fill-rekhta-red text-rekhta-red" : ""}`} />
+                <span className={isUrdu ? "font-nastaliq text-lg" : "text-base"}>
+                  {transliterate(item.title)}
+                </span>
               </button>
-              <ShareDialog
-                url={`${window.location.origin}/poet/${poetId}/nazm/${item.id}`}
-                title={item.title}
-                trigger={
-                  <button className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-light transition-colors">
-                    <Share2 className="h-4 w-4" />
-                  </button>
-                }
-              />
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => toggleFav(item.id)}
+                  className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-red"
+                >
+                  <Heart className={`h-4 w-4 ${favIds.has(item.id) ? "fill-rekhta-red text-rekhta-red" : ""}`} />
+                </button>
+                <ShareDialog
+                  url={`${window.location.origin}/poet/${poetId}/nazm/${item.id}`}
+                  title={item.title}
+                  trigger={
+                    <button className="shrink-0 p-2 text-rekhta-muted hover:text-rekhta-light transition-colors">
+                      <Share2 className="h-4 w-4" />
+                    </button>
+                  }
+                />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>)}
+          ))}
+        </div>)}
     </div>
   );
 };

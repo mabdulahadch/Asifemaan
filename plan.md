@@ -10,89 +10,6 @@ I’ll give you a clear production structure, tools, and full request flow from 
 1️⃣ What Tools You Should Use
 ✅ Backend Tools (Node.js)
 
-Install:
-
-Express.js → API framework
-
-mysql2 → MySQL driver
-
-Prisma ORM (Highly Recommended) → Clean DB management
-
-bcrypt → Password hashing
-
-jsonwebtoken → JWT authentication
-
-cors → Allow frontend requests
-
-dotenv → Environment variables
-
-Why Prisma?
-
-Clean schema
-
-Auto migration
-
-Easy relations
-
-Type-safe queries
-
-Very clean for production
-
-✅ Database Tool
-
-You DO NOT need to install MySQL manually.
-
-Since you're using SiteGround:
-
-Create MySQL database via SiteGround dashboard
-
-Manage it via phpMyAdmin
-
-Get:
-
-DB Name
-
-DB Username
-
-DB Password
-
-Host
-
-So yes — database is created directly inside SiteGround.
-
-2️⃣ Complete Project Structure
-
-You should create two separate folders:
-
-
-├── backend/
-└── frontend/
-
-📁 Backend Structure (Node + Prisma)
-backend/
-│
-├── prisma/
-│   └── schema.prisma
-│
-├── src/
-│   ├── controllers/
-│   ├── routes/
-│   ├── middleware/
-│   ├── services/
-│   ├── config/
-│   │   └── db.ts
-│   └── server.ts
-│
-├── package.json
-└── .env
-
-3️⃣ Prisma Database Setup
-
-Install Prisma:
-
-npm install prisma @prisma/client
-npx prisma init
-
 
 Inside .env:
 
@@ -247,19 +164,3 @@ npm run build
 Upload build folder to SiteGround /public_html.
 
 Done.
-
-7️⃣ Summary
-
-React → Axios → Express → Prisma → MySQL
-
-All running on SiteGround.
-
-Clean, scalable, production-ready.
-
-If you want, I can also generate:
-
-Complete React login code
-
-Complete Express login controller
-
-Or the full Prisma schema + migration SQL.

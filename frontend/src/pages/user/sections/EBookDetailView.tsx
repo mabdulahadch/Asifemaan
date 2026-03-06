@@ -1,5 +1,5 @@
 import { ArrowLeft, Heart, Share2, Loader2, Download, ExternalLink, BookOpen } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Content, ContentService } from "@/lib/api/content";
@@ -8,7 +8,7 @@ import { useFavouriteContent } from "@/hooks/useFavourite";
 import ShareDialog from "@/components/ShareDialog";
 
 const EBookDetailView = () => {
-    const { isUrdu } = useScript();
+    const { t, isUrdu, transliterate } = useLanguage();
     const { contentId } = useParams();
     const navigate = useNavigate();
     const [ebook, setEbook] = useState<Content | null>(null);
@@ -43,7 +43,7 @@ const EBookDetailView = () => {
         );
     }
 
-    if (!ebook) return <div className="text-rekhta-light text-center py-12">E-Book not found</div>;
+    if (!ebook) return <div className="text-rekhta-light text-center py-12">{t("ebookNotFound")}</div>;
 
     return (
         <div className="flex flex-col h-full space-y-4">
@@ -55,7 +55,7 @@ const EBookDetailView = () => {
                     className="text-rekhta-muted hover:text-rekhta-light"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    {isUrdu ? "واپس" : "Back"}
+                    {t("back")}
                 </Button>
 
                 <div className="flex gap-2 items-center">
@@ -86,7 +86,7 @@ const EBookDetailView = () => {
                             >
                                 <a href={getPdfUrl(ebook.pdfFile)} target="_blank" rel="noopener noreferrer">
                                     <ExternalLink className="mr-2 h-4 w-4" />
-                                    {isUrdu ? "بڑے اسکرین پر دیکھیں" : "View Full Screen"}
+                                    {t("viewFullScreen")}
                                 </a>
                             </Button>
                             <Button
@@ -97,7 +97,7 @@ const EBookDetailView = () => {
                             >
                                 <a href={getPdfUrl(ebook.pdfFile)} download={`${ebook.title}.pdf`}>
                                     <Download className="mr-2 h-4 w-4" />
-                                    {isUrdu ? "ڈاؤن لوڈ" : "Download"}
+                                    {t("download")}
                                 </a>
                             </Button>
                         </>
@@ -107,7 +107,7 @@ const EBookDetailView = () => {
 
             <div className="mb-4">
                 <h2 className={`text-2xl font-bold text-rekhta-light ${isUrdu ? "font-nastaliq text-3xl" : ""}`}>
-                    {ebook.title}
+                    {transliterate(ebook.title)}
                 </h2>
             </div>
 
@@ -121,7 +121,7 @@ const EBookDetailView = () => {
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-rekhta-muted">
                         <BookOpen className="h-16 w-16 mb-4 opacity-20" />
-                        <p>{isUrdu ? "پی ڈی ایف دستیاب نہیں ہے" : "PDF not available."}</p>
+                        <p>{t("pdfNotAvailable")}</p>
                     </div>
                 )}
             </div>

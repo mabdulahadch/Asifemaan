@@ -5,7 +5,7 @@ import { FeaturedContent as FeaturedContentType, ContentService } from "@/lib/ap
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const FeaturedContent = () => {
-    const { t, isUrdu } = useLanguage();
+    const { t, isUrdu, transliterate } = useLanguage();
     const [items, setItems] = useState<FeaturedContentType[]>([]);
     const [loading, setLoading] = useState(true);
     const [current, setCurrent] = useState(0);
@@ -104,7 +104,7 @@ const FeaturedContent = () => {
                                     : "text-lg italic sm:text-xl"
                                     }`}
                             >
-                                {item.title}
+                                {transliterate(item.title)}
                             </p>
 
                             {item.textContent && (
@@ -114,16 +114,16 @@ const FeaturedContent = () => {
                                         : "text-base italic"
                                         }`}
                                 >
-                                    {item.textContent.length > 200
+                                    {transliterate(item.textContent.length > 200
                                         ? item.textContent.substring(0, 200) + "..."
-                                        : item.textContent}
+                                        : item.textContent)}
                                 </p>
                             )}
                         </div>
 
                         {/* Poet Name */}
                         <p className="text-sm font-bold uppercase tracking-wider text-foreground">
-                            {poetName}
+                            {transliterate(poetName)}
                         </p>
 
                         {/* Type Badge */}

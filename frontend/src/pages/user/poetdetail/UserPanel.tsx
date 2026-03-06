@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFavContents, getFollowedPoets, removeFavContent, unfollowPoet } from "@/lib/api/favourites";
-import { ScriptProvider, useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import TopNavBar from "@/pages/user/poetdetail/TopNavBar";
 import { Button } from "@/components/ui/button";
 import { Heart, UserMinus, Loader2, User, LogOut, ArrowLeft, Filter, X } from "lucide-react";
@@ -28,18 +28,18 @@ interface FollowedPoet {
 
 type Tab = "favourites" | "poets";
 
-const CONTENT_TYPES = [
-    { value: "ALL", labelEn: "All", labelUr: "سب" },
-    { value: "GHAZAL", labelEn: "Ghazal", labelUr: "غزل" },
-    { value: "NAZM", labelEn: "Nazm", labelUr: "نظم" },
-    { value: "SHER", labelEn: "Sher", labelUr: "شعر" },
-    { value: "AUDIO", labelEn: "Audio", labelUr: "آڈیو" },
-    { value: "EBOOK", labelEn: "E-Book", labelUr: "ای بک" },
-    { value: "VIDEO", labelEn: "Video", labelUr: "ویڈیو" },
+const CONTENT_TYPE_KEYS = [
+    { value: "ALL", key: "all" },
+    { value: "GHAZAL", key: "ghazal" },
+    { value: "NAZM", key: "nazm" },
+    { value: "SHER", key: "sher" },
+    { value: "AUDIO", key: "audio" },
+    { value: "EBOOK", key: "ebook" },
+    { value: "VIDEO", key: "video" },
 ];
 
-const UserPanelContent = () => {
-    const { isUrdu } = useScript();
+const UserPanel = () => {
+    const { t, transliterate } = useLanguage();
     const { user, isLoggedIn, loading: authLoading, logout } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<Tab>("favourites");
@@ -109,8 +109,8 @@ const UserPanelContent = () => {
     }
 
     const typeLabel = (type: string) => {
-        const found = CONTENT_TYPES.find((t) => t.value === type);
-        if (found) return isUrdu ? found.labelUr : found.labelEn;
+        const found = CONTENT_TYPE_KEYS.find((ct) => ct.value === type);
+        if (found) return t(found.key);
         return type;
     };
 
@@ -144,7 +144,7 @@ const UserPanelContent = () => {
                     className="mb-6 text-rekhta-muted hover:text-rekhta-light"
                 >
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    {isUrdu ? "واپس" : "Back"}
+                    {t("back")}
                 </Button>
 
                 {/* User Header */}
@@ -167,7 +167,7 @@ const UserPanelContent = () => {
                             className="text-rekhta-muted hover:text-rekhta-red"
                         >
                             <LogOut className="h-4 w-4 mr-2" />
-                            {isUrdu ? "لاگ آوٹ" : "Logout"}
+                            {t("logout")}
                         </Button>
                     </div>
 
@@ -175,11 +175,11 @@ const UserPanelContent = () => {
                     <div className="mt-4 flex gap-6 border-t border-rekhta-border/50 pt-4">
                         <div className="text-center">
                             <span className="block text-xl font-bold text-rekhta-gold">{favContents.length}</span>
-                            <span className="text-xs text-rekhta-muted">{isUrdu ? "پسندیدہ" : "Favourites"}</span>
+                            <span className="text-xs text-rekhta-muted">{t("favourites")}</span>
                         </div>
                         <div className="text-center">
                             <span className="block text-xl font-bold text-rekhta-gold">{followedPoets.length}</span>
-                            <span className="text-xs text-rekhta-muted">{isUrdu ? "شاعر" : "Following"}</span>
+                            <span className="text-xs text-rekhta-muted">{t("following")}</span>
                         </div>
                     </div>
                 </div>
@@ -195,7 +195,7 @@ const UserPanelContent = () => {
                                 }`}
                         >
                             <Heart className="h-4 w-4" />
-                            {isUrdu ? "پسندیدہ مواد" : "Favourite Content"}
+                            {t("favouriteContent")}
                         </button>
                         <button
                             onClick={() => setActiveTab("poets")}
@@ -205,7 +205,7 @@ const UserPanelContent = () => {
                                 }`}
                         >
                             <User className="h-4 w-4" />
-                            {isUrdu ? "فالو شدہ شاعر" : "Followed Poets"}
+                            {t("followedPoets")}
                         </button>
                     </div>
 
@@ -229,7 +229,7 @@ const UserPanelContent = () => {
                 {/* Filter chips */}
                 {activeTab === "favourites" && showFilter && (
                     <div className="mb-4 flex flex-wrap gap-2">
-                        {CONTENT_TYPES.map((ct) => {
+                        {CONTENT_TYPE_KEYS.map((ct) => {
                             const count = ct.value === "ALL" ? favContents.length : typeCounts[ct.value] || 0;
                             return (
                                 <button
@@ -240,7 +240,7 @@ const UserPanelContent = () => {
                                         : "border border-rekhta-border text-rekhta-muted hover:border-rekhta-gold/50 hover:text-rekhta-light"
                                         }`}
                                 >
-                                    {isUrdu ? ct.labelUr : ct.labelEn}
+                                    {t(ct.key)}
                                     <span className={`text-[10px] ${typeFilter === ct.value ? "text-rekhta-darker/70" : "text-rekhta-muted/60"}`}>
                                         ({count})
                                     </span>
@@ -253,7 +253,7 @@ const UserPanelContent = () => {
                                 className="flex items-center gap-1 rounded-full px-2 py-1.5 text-xs text-rekhta-muted hover:text-rekhta-red transition-colors"
                             >
                                 <X className="h-3 w-3" />
-                                {isUrdu ? "صاف" : "Clear"}
+                                {t("clear")}
                             </button>
                         )}
                     </div>
@@ -271,17 +271,11 @@ const UserPanelContent = () => {
                                 <Heart className="mx-auto mb-4 h-12 w-12 text-rekhta-muted/40" />
                                 <p className="text-rekhta-muted">
                                     {typeFilter !== "ALL"
-                                        ? isUrdu
-                                            ? `کوئی ${typeLabel(typeFilter)} پسندیدہ نہیں`
-                                            : `No ${typeLabel(typeFilter)} favourites`
-                                        : isUrdu
-                                            ? "ابھی تک کوئی پسندیدہ مواد نہیں"
-                                            : "No favourite content yet"}
+                                        ? `${t("noFavOfType")} ${typeLabel(typeFilter)}`
+                                        : t("noFavContentYet")}
                                 </p>
                                 <p className="mt-2 text-sm text-rekhta-muted/60">
-                                    {isUrdu
-                                        ? "مواد پسند کریں تاکہ وہ یہاں نظر آئیں"
-                                        : "Like content to see it here"}
+                                    {t("likeContentToSee")}
                                 </p>
                             </div>
                         ) : (
@@ -301,10 +295,10 @@ const UserPanelContent = () => {
                                                 </span>
                                                 <div className="min-w-0 flex-1">
                                                     <p className="truncate text-rekhta-light/90 transition-colors group-hover:text-rekhta-gold">
-                                                        {item.title}
+                                                        {transliterate(item.title)}
                                                     </p>
                                                     <p className="text-xs text-rekhta-muted">
-                                                        {item.poetPenName || item.poetName}
+                                                        {transliterate(item.poetPenName || item.poetName)}
                                                     </p>
                                                 </div>
                                             </div>
@@ -312,7 +306,7 @@ const UserPanelContent = () => {
                                         <button
                                             onClick={() => handleRemoveFav(item.id)}
                                             className="shrink-0 ml-2 p-2 text-rekhta-red/70 hover:text-rekhta-red transition-colors"
-                                            title={isUrdu ? "ہٹائیں" : "Remove"}
+                                            title={t("remove")}
                                         >
                                             <Heart className="h-4 w-4 fill-current" />
                                         </button>
@@ -328,12 +322,10 @@ const UserPanelContent = () => {
                             <div className="rounded-lg border border-rekhta-border bg-rekhta-card/10 p-12 text-center">
                                 <User className="mx-auto mb-4 h-12 w-12 text-rekhta-muted/40" />
                                 <p className="text-rekhta-muted">
-                                    {isUrdu ? "ابھی تک کسی شاعر کو فالو نہیں کیا" : "Not following any poets yet"}
+                                    {t("notFollowingAnyPoets")}
                                 </p>
                                 <p className="mt-2 text-sm text-rekhta-muted/60">
-                                    {isUrdu
-                                        ? "شاعروں کو فالو کریں تاکہ وہ یہاں نظر آئیں"
-                                        : "Follow poets to see them here"}
+                                    {t("followPoetsToSee")}
                                 </p>
                             </div>
                         ) : (
@@ -361,19 +353,19 @@ const UserPanelContent = () => {
                                         <div className="flex-1 min-w-0">
                                             <Link to={`/poet/${poet.id}`}>
                                                 <p className="font-medium text-rekhta-light transition-colors group-hover:text-rekhta-gold">
-                                                    {poet.penName || poet.realName}
+                                                    {transliterate(poet.penName || poet.realName)}
                                                 </p>
                                             </Link>
                                             {poet.bio && (
                                                 <p className="mt-1 truncate text-xs text-rekhta-muted">
-                                                    {poet.bio}
+                                                    {transliterate(poet.bio)}
                                                 </p>
                                             )}
                                         </div>
                                         <button
                                             onClick={() => handleUnfollow(poet.id)}
                                             className="shrink-0 rounded-full p-2 text-rekhta-muted hover:bg-rekhta-red/10 hover:text-rekhta-red transition-colors"
-                                            title={isUrdu ? "ان فالو" : "Unfollow"}
+                                            title={t("unfollow")}
                                         >
                                             <UserMinus className="h-4 w-4" />
                                         </button>
@@ -387,11 +379,5 @@ const UserPanelContent = () => {
         </div>
     );
 };
-
-const UserPanel = () => (
-    <ScriptProvider>
-        <UserPanelContent />
-    </ScriptProvider>
-);
 
 export default UserPanel;

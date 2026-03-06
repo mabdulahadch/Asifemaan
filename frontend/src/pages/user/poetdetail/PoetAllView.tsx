@@ -6,24 +6,24 @@ import EBookSection from "../sections/EBookSection";
 import AudioSection from "../sections/AudioSection";
 import VideoSection from "../sections/VideoSection";
 import { Poet } from "@/lib/api/poets";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const PoetAllView = () => {
     const { poet } = useOutletContext<{ poet: Poet }>();
+    const { t, transliterate } = useLanguage();
 
     if (!poet) return null;
 
     return (
         <div className="space-y-10">
 
-             {/* <div className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-6"> */}
             <h2 className="text-lg font-semibold text-rekhta-gold">
-                {"About"}
+                {t("about")}
             </h2>
             <p className={`leading-relaxed text-rekhta-light/80`}>
-                {poet.bio}
+                {transliterate(poet.bio)}
             </p>
-        {/* </div> */}
-            <GhazalSection poetId={poet.id} limit={3} />   {/* onSelectGhazal={(id) => navigate(`/poet/${poet.id}/ghazal/${id}`)}  */}
+            <GhazalSection poetId={poet.id} limit={3} />
             <SherSection poetId={poet.id} limit={3} />
             <NazmSection poetId={poet.id} limit={3} />
             <EBookSection poetId={poet.id} limit={3} />

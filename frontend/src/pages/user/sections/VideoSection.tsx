@@ -1,5 +1,5 @@
 import { Play, ExternalLink, Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { Content, ContentService } from "@/lib/api/content";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
-  const { isUrdu } = useScript();
+  const { t, isUrdu, transliterate } = useLanguage();
   const { id: urlPoetId } = useParams();
   const navigate = useNavigate();
   const poetId = propPoetId || urlPoetId;
@@ -55,7 +55,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
   };
 
 
-   if (loading) {
+  if (loading) {
     return (
       <div className="flex justify-center py-8">
         <Loader2 className="h-6 w-6 animate-spin text-rekhta-gold" />
@@ -67,7 +67,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
     <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold uppercase tracking-wider text-rekhta-gold">
-          {isUrdu ? "ویڈیو" : "Video"}{" "}
+          {t("video")}{" "}
           <span className="text-sm text-rekhta-muted">({videoList.length})</span>
         </h2>
         {limit && (
@@ -75,16 +75,13 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
             onClick={() => navigate(`/poet/${poetId}/video`)}
             className="text-sm text-rekhta-gold hover:underline"
           >
-            {isUrdu ? "سب دیکھیں" : "See All"}
+            {t("seeAll")}
           </button>
         )}
       </div>
 
       {videoList.length === 0 && !loading ? (
-        <EmptyState
-          messageEn="No videos available."
-          messageUr="کوئی ویڈیو دستیاب نہیں ہے"
-        />
+        <EmptyState translationKey="noVideo" />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {displayed.map((entry) => {
@@ -109,7 +106,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-rekhta-darker text-rekhta-muted">
-                      No Preview
+                      {t("noPreview")}
                     </div>
                   )}
 
@@ -124,7 +121,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
                 {/* Content Info */}
                 <div className="p-3">
                   <h3 className={`line-clamp-2 text-sm font-medium text-rekhta-light/90 group-hover:text-rekhta-gold ${isUrdu ? "font-nastaliq text-base leading-loose" : ""}`}>
-                    {entry.title}
+                    {transliterate(entry.title)}
                   </h3>
 
                   <div className="mt-2 flex items-center justify-between">
@@ -182,7 +179,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
 
           <div className="p-4 flex items-center justify-between bg-rekhta-darker border-t border-rekhta-border">
             <h3 className="font-medium text-rekhta-light truncate mr-4">
-              {selectedVideo?.title}
+              {selectedVideo ? transliterate(selectedVideo.title) : ""}
             </h3>
             {selectedVideo?.youtubeLink && (
               <a
@@ -191,7 +188,7 @@ const VideoSection = ({ poetId: propPoetId, limit }: Props) => {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-xs text-rekhta-gold hover:underline shrink-0"
               >
-                Watch on YouTube <ExternalLink className="h-3 w-3" />
+                {t("watchOnYoutube")} <ExternalLink className="h-3 w-3" />
               </a>
             )}
           </div>

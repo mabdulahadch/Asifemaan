@@ -1,5 +1,5 @@
 import { ArrowLeft, Heart, Share2, Loader2 } from "lucide-react";
-import { useScript } from "@/contexts/ScriptContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Content, ContentService } from "@/lib/api/content";
@@ -8,7 +8,7 @@ import { useFavouriteContent } from "@/hooks/useFavourite";
 import ShareDialog from "@/components/ShareDialog";
 
 const SherDetailView = () => {
-    const { isUrdu } = useScript();
+    const { t, isUrdu, transliterate } = useLanguage();
     const { contentId } = useParams();
     const navigate = useNavigate();
     const [sher, setSher] = useState<Content | null>(null);
@@ -38,7 +38,7 @@ const SherDetailView = () => {
         );
     }
 
-    if (!sher) return <div className="text-rekhta-light text-center py-12">Sher not found</div>;
+    if (!sher) return <div className="text-rekhta-light text-center py-12">{t("sherNotFound")}</div>;
 
     const couplets = sher.textContent?.split("\n\n") || [];
 
@@ -55,19 +55,19 @@ const SherDetailView = () => {
         <div>
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mb-4 text-rekhta-muted hover:text-rekhta-light">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                {isUrdu ? "واپس" : "Back"}
+                {t("back")}
             </Button>
 
             <div className="mb-6">
                 <h2 className={`text-2xl font-bold text-rekhta-light ${isUrdu ? "font-nastaliq text-3xl" : ""}`}>
-                    {sher.title}
+                    {transliterate(sher.title)}
                 </h2>
             </div>
 
             {parsedMediaFiles.length > 0 && (
                 <div className="mb-8 overflow-hidden space-y-4">
                     <h3 className="text-lg font-medium text-rekhta-gold">
-                        {isUrdu ? "تصاویر" : "Images"}
+                        {t("images")}
                     </h3>
                     <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pt-2 scrollbar-hide items-center">
                         {parsedMediaFiles.map((src, i) => (
@@ -90,7 +90,7 @@ const SherDetailView = () => {
                             className={`whitespace-pre-wrap leading-loose text-rekhta-light/90 ${isUrdu ? "font-nastaliq text-xl text-right" : "font-serif text-lg text-center"
                                 }`}
                         >
-                            {couplet}
+                            {transliterate(couplet)}
                         </pre>
                     </div>
                 ))}
