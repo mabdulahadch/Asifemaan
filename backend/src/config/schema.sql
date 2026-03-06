@@ -88,4 +88,3 @@ CREATE TABLE Favourite_Poet (
   INDEX idx_poetId (poetId)
 )
 
-

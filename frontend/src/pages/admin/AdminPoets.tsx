@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { AdminService } from "@/lib/api/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2, Plus, Pencil, Trash2 } from "lucide-react";
 
-const API = "http://localhost:3000/api";
+
 
 interface Poet {
     id: number;
@@ -50,8 +50,8 @@ const AdminPoets = () => {
 
     const fetchPoets = async () => {
         try {
-            const res = await axios.get(`${API}/poets`);
-            setPoets(res.data.data);
+            const res = await AdminService.getPoets();
+            setPoets(res.data);
         } catch {
             setError("Failed to load poets.");
         } finally {
@@ -87,13 +87,9 @@ const AdminPoets = () => {
         setError("");
         try {
             if (editingId) {
-                await axios.put(`${API}/poets/${editingId}`, form, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                await AdminService.updatePoet(editingId, form, token);
             } else {
-                await axios.post(`${API}/poets`, form, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
+                await AdminService.createPoet(form, token);
             }
             setDialogOpen(false);
             fetchPoets();
@@ -106,9 +102,7 @@ const AdminPoets = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axios.delete(`${API}/poets/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await AdminService.deletePoet(id, token);
             setDeleteConfirm(null);
             fetchPoets();
         } catch (err: any) {

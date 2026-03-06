@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api/favourites";
+const API_URL = `${import.meta.env.VITE_API_URL}/favourites`;
 
 const authHeaders = () => {
     const token = localStorage.getItem("token");

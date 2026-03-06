@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import axios from "axios";
+import { HomeService } from "@/lib/api/home";
 
 const HeroBannerCarousel = () => {
     const [bannerImages, setBannerImages] = useState<string[]>([]);
@@ -10,10 +10,10 @@ const HeroBannerCarousel = () => {
     useEffect(() => {
         const fetchBanners = async () => {
             try {
-                const res = await axios.get("http://localhost:3000/api/settings");
-                if (res.data?.data?.banners) {
+                const res = await HomeService.getSettings();
+                if (res?.data?.banners) {
                     try {
-                        const parsed = JSON.parse(res.data.data.banners);
+                        const parsed = JSON.parse(res.data.banners);
                         if (Array.isArray(parsed) && parsed.length > 0) {
                             setBannerImages(parsed);
                         }

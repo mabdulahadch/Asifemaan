@@ -50,8 +50,28 @@ const romanExceptions: Record<string, string> = {
     'زمین': 'zameen', 'آسمان': 'aasman', 'دھوپ': 'dhoop',
 };
 
+// ── Roman → Urdu character map ──
+const romanToUrduMap: Record<string, string> = {
+    'sh': 'ش', 'ch': 'چ', 'kh': 'خ', 'gh': 'غ', 'ph': 'پھ', 'th': 'تھ', 'dh': 'دھ', 'zh': 'ژ', 'aa': 'آ', 'ee': 'ی', 'oo': 'و',
+    'a': 'ا', 'b': 'ب', 'c': 'ک', 'd': 'د', 'e': 'ی',
+    'f': 'ف', 'g': 'گ', 'h': 'ہ', 'i': 'ی', 'j': 'ج',
+    'k': 'ک', 'l': 'ل', 'm': 'م', 'n': 'ن', 'o': 'و',
+    'p': 'پ', 'q': 'ق', 'r': 'ر', 's': 'س', 't': 'ت',
+    'u': 'و', 'v': 'و', 'w': 'و', 'x': 'کس', 'y': 'ی', 'z': 'ز'
+};
+
+// ── Roman → Hindi character map ──
+const romanToHindiMap: Record<string, string> = {
+    'sh': 'श', 'ch': 'च', 'kh': 'ख़', 'gh': 'ग़', 'ph': 'फ', 'th': 'थ', 'dh': 'ध', 'zh': 'झ', 'aa': 'आ', 'ee': 'ई', 'oo': 'ऊ',
+    'a': 'अ', 'b': 'ब', 'c': 'क', 'd': 'द', 'e': 'ए',
+    'f': 'फ़', 'g': 'ग', 'h': 'ह', 'i': 'इ', 'j': 'ज',
+    'k': 'क', 'l': 'ल', 'm': 'म', 'n': 'न', 'o': 'ओ',
+    'p': 'प', 'q': 'क़', 'r': 'र', 's': 'स', 't': 'त',
+    'u': 'उ', 'v': 'व', 'w': 'व', 'x': 'क्स', 'y': 'य', 'z': 'ज़'
+};
+
 /**
- * Walk the Urdu string and replace each character using the given map.
+ * Walk the string and replace each character using the given map.
  * Multi-char sequences (like 'آ' which is alef + madda) are checked first
  * by trying 2-char lookahead before falling back to single chars.
  */
@@ -145,14 +165,35 @@ export function urduToRoman(text: string): string {
     return result;
 }
 
+/** Transliterate Roman text to Urdu */
+export function romanToUrdu(text: string): string {
+    return transliterateWithMap(text.toLowerCase(), romanToUrduMap);
+}
+
+/** Transliterate Roman text to Hindi */
+export function romanToHindi(text: string): string {
+    return transliterateWithMap(text.toLowerCase(), romanToHindiMap);
+}
+
+function isRoman(text: string): boolean {
+    const hasLatin = /[a-zA-Z]/.test(text);
+    const hasUrduOrHindi = /[\u0600-\u06FF\u0900-\u097F]/.test(text);
+    return hasLatin && !hasUrduOrHindi;
+}
+
 /**
- * Transliterate dynamic Urdu text to the target language script.
- * - "ur" → original Urdu text (no-op)
- * - "hi" → Devanagari
- * - "en" → Roman Urdu
+ * Transliterate dynamic text to the target language script.
+ * Handles both Urdu->Hindi/Roman and Roman->Urdu/Hindi
  */
 export function transliterate(text: string, targetLang: Language): string {
     if (!text) return text;
+
+    if (isRoman(text)) {
+        if (targetLang === "en") return text;
+        if (targetLang === "ur") return romanToUrdu(text);
+        if (targetLang === "hi") return romanToHindi(text);
+    }
+
     if (targetLang === "ur") return text;
     if (targetLang === "hi") return urduToHindi(text);
     return urduToRoman(text); // "en"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { AdminService } from "@/lib/api/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +23,7 @@ import {
 
 import { Loader2, Plus, Pencil, Trash2, FileText, Upload, Star } from "lucide-react";
 
-const API = "http://localhost:3000/api";
+
 
 const CONTENT_TYPES = ["GHAZAL", "NAZM", "SHER", "EBOOK", "AUDIO", "VIDEO"] as const;
 
@@ -84,8 +84,8 @@ const AdminContent = () => {
     useEffect(() => {
         const fetchPoets = async () => {
             try {
-                const res = await axios.get(`${API}/poets`);
-                setPoets(res.data.data);
+                const res = await AdminService.getPoets();
+                setPoets(res.data);
             } catch {
                 setError("Failed to load poets.");
             } finally {
@@ -100,8 +100,8 @@ const AdminContent = () => {
         setLoading(true);
         setError("");
         try {
-            const res = await axios.get(`${API}/content/poet/${poetId}`);
-            setContent(res.data.data);
+            const res = await AdminService.getContentByPoet(poetId);
+            setContent(res.data);
         } catch {
             setError("Failed to load content.");
         } finally {
@@ -194,9 +194,9 @@ const AdminContent = () => {
             };
 
             if (editingId) {
-                await axios.put(`${API}/content/${editingId}`, formData, config);
+                await AdminService.updateContent(editingId, formData, config);
             } else {
-                await axios.post(`${API}/content`, formData, config);
+                await AdminService.createContent(formData, config);
             }
 
             setDialogOpen(false);
@@ -236,9 +236,7 @@ const AdminContent = () => {
 
     const handleDelete = async (id: number) => {
         try {
-            await axios.delete(`${API}/content/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await AdminService.deleteContent(id, token);
             setDeleteConfirm(null);
             fetchContent(selectedPoetId);
         } catch (err: any) {

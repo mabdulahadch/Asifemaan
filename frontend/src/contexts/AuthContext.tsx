@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import axios from "axios";
+import { getProfile } from "@/lib/api/auth";
 
-const API_URL = "http://localhost:3000/api";
+
 
 interface User {
     id: number;
@@ -42,13 +42,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (savedToken) {
             setToken(savedToken);
             // Validate token by fetching profile
-            axios
-                .get(`${API_URL}/auth/profile`, {
-                    headers: { Authorization: `Bearer ${savedToken}` },
-                })
+            getProfile(savedToken)
                 .then((res) => {
-                    if (res.data.success) {
-                        setUser(res.data.data);
+                    if (res.success) {
+                        setUser(res.data);
                     } else {
                         localStorage.removeItem("token");
                         setToken(null);

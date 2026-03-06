@@ -2,17 +2,17 @@ import { Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { HomeService } from "@/lib/api/home";
 
 const Footer = () => {
     const { t } = useLanguage();
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
-        axios.get("http://localhost:3000/api/settings")
+        HomeService.getSettings()
             .then(res => {
-                if (res.data && res.data.data) {
-                    setSettings(res.data.data);
+                if (res && res.data) {
+                    setSettings(res.data);
                 }
             })
             .catch(err => console.error("Failed to load footer links", err));

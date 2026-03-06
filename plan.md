@@ -17,7 +17,7 @@ DATABASE_URL="mysql://uzwmmbyxy6xmn:asifemaan123@localhost:3306/db6bd05mziowfc"
 JWT_SECRET="asifemaan123"
 
 
-Inside schema.prisma:
+
 
 model User {
   id        Int      @id @default(autoincrement())
@@ -71,9 +71,6 @@ enum ContentType {
 }
 
 
-Run:
-
-npx prisma migrate dev
 
 
 4️⃣ API Flow (Frontend → Backend → DB)
@@ -147,7 +144,6 @@ JWT_SECRET="asifemaan123"
 
 Step 4: Run Database Migration
 
-npx prisma migrate deploy
 
 Step 5: Start Server
 

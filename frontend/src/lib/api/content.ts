@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = `${import.meta.env.VITE_API_URL}/content`;
 
 export interface Content {
     id: number;
@@ -25,15 +25,15 @@ export interface FeaturedContent extends Content {
 
 export const ContentService = {
     getContentByPoet: async (poetId: string | number): Promise<Content[]> => {
-        const response = await axios.get(`${API_URL}/content/poet/${poetId}`);
+        const response = await axios.get(`${API_URL}/poet/${poetId}`);
         return response.data.data;
     },
     getContentById: async (id: string | number): Promise<Content> => {
-        const response = await axios.get(`${API_URL}/content/${id}`);
+        const response = await axios.get(`${API_URL}/${id}`);
         return response.data.data;
     },
     getFeaturedContent: async (): Promise<FeaturedContent[]> => {
-        const response = await axios.get(`${API_URL}/content/featured`);
+        const response = await axios.get(`${API_URL}/featured`);
         return response.data.data;
     },
 };

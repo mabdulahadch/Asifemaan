@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { AdminService } from "@/lib/api/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Trash2, Upload, Link as LinkIcon, Save } from "lucide-react";
 
-const API = "http://localhost:3000/api";
+
 
 interface SiteSettings {
     youtubeUrl: string | null;
@@ -45,8 +45,8 @@ const AdminSiteSettings = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await axios.get(`${API}/settings`);
-                const data = res.data.data;
+                const res = await AdminService.getSettings();
+                const data = res.data;
                 if (data) {
                     setSettings({
                         youtubeUrl: data.youtubeUrl || "",
@@ -117,8 +117,8 @@ const AdminSiteSettings = () => {
                 },
             };
 
-            const res = await axios.put(`${API}/settings`, formData, config);
-            const updatedData = res.data.data;
+            const res = await AdminService.updateSettings(formData, config);
+            const updatedData = res.data;
 
             setSuccessMsg("Settings saved successfully.");
             setNewBanners([]);
