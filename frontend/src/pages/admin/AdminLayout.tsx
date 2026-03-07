@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { BookOpen, Users, LogOut, Home, Settings } from "lucide-react";
-// import poetLogo from "../../../dist/assets/siteLogo.png"
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
@@ -43,7 +42,7 @@ const AdminLayout = () => {
                         />
                     ) : (
                         <img
-                            src="/assets/siteLogo.png"
+                            src=""
                             alt="Site Logo Default"
                             className="h-30 w-auto object-contain"
                         />

@@ -11,11 +11,17 @@ require_once __DIR__ . '/../helpers/env.php';
  */
 function uploadToSiteGround($tmpPath, $originalName, $folder = 'ebooks')
 {
-    $host = getenv('FTP_HOST');
-    $user = getenv('FTP_USER');
-    $password = getenv('FTP_PASSWORD');
-    $port = (int)(getenv('FTP_PORT') ?: 21);
-    $baseUrl = getenv('SITE_BASE_URL') ?: 'https://asifemaan.com';
+    // $host = getenv('FTP_HOST');
+    // $user = getenv('FTP_USER');
+    // $password = getenv('FTP_PASSWORD');
+    // $port = (int)(getenv('FTP_PORT') ?: 21);
+    // $baseUrl = getenv('SITE_BASE_URL') ?: 'https://asifemaan.com';
+
+    $host = 'ftp.asifemaan.com';
+    $user = 'ftp_pdf@asifemaan.com';
+    $password = '1?s@2c3mR1@6';
+    $port = 21;
+    $baseUrl = 'https://asifemaan.com';
 
     // Connect via FTP SSL
     $conn = ftp_ssl_connect($host, $port);

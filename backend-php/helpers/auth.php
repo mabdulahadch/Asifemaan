@@ -9,8 +9,8 @@ require_once __DIR__ . '/env.php';
  */
 function generateToken($userId)
 {
-    $secret = getenv('JWT_SECRET') ?: 'asifemaan123';
-    $expiresIn = (int)(getenv('JWT_EXPIRES_IN') ?: 604800); // 7 days in seconds
+    $secret = 'asifemaan123';
+    $expiresIn = 604800; // 7 days in seconds
 
     $payload = [
         'id' => $userId,
@@ -34,7 +34,7 @@ function authenticate()
     }
 
     $token = substr($authHeader, 7);
-    $secret = getenv('JWT_SECRET') ?: 'asifemaan123';
+    $secret = 'asifemaan123';
 
     try {
         $decoded = JWT::decode($token, $secret);

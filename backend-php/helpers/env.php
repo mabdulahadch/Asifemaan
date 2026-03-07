@@ -1,7 +1,7 @@
 <?php
 /**
  * Simple .env file parser.
- * Loads key=value pairs from .env into $_ENV and getenv().
+ * Loads key=value pairs from .env into $_ENV
  */
 function loadEnv($path)
 {

@@ -110,7 +110,7 @@ const TopNavBar = () => {
               />
             ) : (
               <img
-                src="/assets/siteLogo.png"
+                src=""
                 alt="Asifemaan Default"
                 className="h-12 w-auto"
               />

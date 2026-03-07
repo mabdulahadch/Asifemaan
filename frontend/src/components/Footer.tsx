@@ -33,9 +33,9 @@ const Footer = () => {
                                 />
                             ) : (
                                 <img
-                                    src="/assets/siteLogo.png"
-                                    alt="Asifemaan"
-                                    className="h-12 w-auto opacity-90 grayscale-[0.2]"
+                                    src=""
+                                    alt="Site Logo"
+                                    className="h-12 w-auto opacity-90 grayscale-[0.2] object-contain"
                                 />
                             )}
                         </Link>

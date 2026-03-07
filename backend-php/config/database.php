@@ -10,13 +10,14 @@ function getDB()
     if ($db !== null)
         return $db;
 
-    $host = getenv('DB_HOST') ?: '127.0.0.1';
-    $user = getenv('DB_USER') ?: 'root';
-    $password = getenv('DB_PASSWORD') ?: '';
-    $dbname = getenv('DB_NAME') ?: 'poetry';
-    $port = (int)(getenv('DB_PORT') ?: 3306);
+    $DB_HOST = 'localhost';
+    $DB_USER = 'uzwmmbyxy6xmn';
+    $DB_PASSWORD = 'asifemaan123';
+    $DB_NAME = 'db6bd05mziowfc';
+    $PORT = 3306;
 
-    $db = new mysqli($host, $user, $password, $dbname, $port);
+    $db = new mysqli($DB_HOST, $DB_USER, $DB_PASSWORD, $DB_NAME, $PORT);
+
 
     if ($db->connect_error) {
         http_response_code(500);
