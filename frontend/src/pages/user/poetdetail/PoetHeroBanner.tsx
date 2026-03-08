@@ -3,6 +3,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Poet } from "@/lib/api/poets";
 import { useFollowPoet } from "@/hooks/useFavourite";
+import ShareDialog from "@/components/ShareDialog";
 
 interface PoetHeroBannerProps {
   poet: Poet;
@@ -15,10 +16,13 @@ const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
   const isFollowing = followedIds.has(poet.id);
 
   function getFirstSentence(text) {
-  return text?.match(/.*?[.۔।]/)?.[0] || text;
-}
+    return text?.match(/.*?[.۔।]/)?.[0] || text;
+  }
 
-
+  const shareUrl = `${window.location.origin}/poet/${poet.id}`;
+  const title = transliterate((poet.penName || poet.realName) || "")
+    ?.toLowerCase()
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 
   return (
     <section className="relative border-b border-rekhta-border bg-gradient-to-b from-rekhta-gold/10 to-rekhta-gold/10 py-8 md:py-12">
@@ -85,13 +89,21 @@ const PoetHeroBanner = ({ poet }: PoetHeroBannerProps) => {
               {isFollowing ? t("following") : t("follow")}
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-rekhta-muted hover:text-foreground"
-            >
-              <Share2 className="h-5 w-5" />
-            </Button>
+
+            <ShareDialog
+              url={shareUrl}
+              title={title}
+              trigger={
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-rekhta-gold border-rekhta-gold hover:bg-rekhta-gold/0 hover:text-rekhta-gold"
+                >
+                  <Share2 className="h-4 w-4" />
+                </button>
+              }
+            />
+
+
           </div>
         </div>
       </div>

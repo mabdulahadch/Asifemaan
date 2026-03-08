@@ -9,7 +9,7 @@ export const translations: Record<string, Record<Language, string>> = {
     language: { en: "Language", ur: "زبان", hi: "भाषा" },
 
     // ── Poets Page ──
-    poets: { en: "Poets", ur: "شعراء", hi: "कवि" },
+    featuredContent: { en: "Featured Content", ur: "نمایاں مواد", hi: "विशेष सामग्री" },
     poetsSubtitle: {
         en: "Explore the collection of Urdu poets",
         ur: "اردو شعراء کا مجموعہ دیکھیں",

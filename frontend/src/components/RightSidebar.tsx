@@ -34,7 +34,7 @@ const RightSidebar = () => {
       {/* Poet Navigation */}
       <div className="rounded-lg border border-rekhta-border bg-rekhta-card/20 p-4">
         <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-rekhta-gold">
-          {t("poets")}
+          {t("featuredContent")}
         </h3>
         <ul className="space-y-2">
           {sidebarLinks.map(({ key, sectionId }) => (

@@ -60,7 +60,7 @@ const HeroBannerCarousel = () => {
     }
 
     return (
-        <section className="relative w-full overflow-hidden" id="hero-banner">
+        <section className="relative w-full overflow-hidden" id="hero-banner" dir="ltr">
             {/* Slides Container */}
             <div
                 className="flex transition-transform duration-600 ease-in-out"

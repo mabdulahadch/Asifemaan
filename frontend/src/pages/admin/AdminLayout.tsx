@@ -4,7 +4,7 @@ import { BookOpen, Users, LogOut, Home, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
-    { to: "/admin/poets", label: "Poets", icon: Users },
+    { to: "/admin/profile", label: "Profile", icon: Users },
     { to: "/admin/content", label: "Content", icon: BookOpen },
     { to: "/admin/settings", label: "Site Settings", icon: Settings },
 ];

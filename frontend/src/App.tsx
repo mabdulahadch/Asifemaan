@@ -68,8 +68,8 @@ const App = () => (
               {/* Protected Admin routes */}
               <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
                 <Route path="/admin" element={<AdminLayout />}>
-                  <Route index element={<Navigate to="/admin/poets" replace />} />
-                  <Route path="poets" element={<AdminPoets />} />
+                  <Route index element={<Navigate to="/admin/profile" replace />} />
+                  <Route path="profile" element={<AdminPoets />} />
                   <Route path="content" element={<AdminContent />} />
                   <Route path="settings" element={<AdminSiteSettings />} />
                 </Route>

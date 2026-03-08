@@ -129,13 +129,13 @@ const TopNavBar = () => {
                     to={`/poet/${id}/${tab.path}`}
                     className={`relative shrink-0 px-4 py-4 text-sm transition-colors flex items-center ${activeTab === tab.id
                       ? "text-rekhta-gold font-semibold"
-                      : "text-rekhta-muted hover:text-foreground"
+                      : "text-rekhta-gold"
                       }`}
                   >
                     {t(tab.key as any)}
-                    {tab.count !== undefined && (
+                    {/* {tab.count !== undefined && (
                       <span className="ml-1 text-xs opacity-70">{tab.count}</span>
-                    )}
+                    )} */}
                     {activeTab === tab.id && (
                       <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-rekhta-gold" />
                     )}
