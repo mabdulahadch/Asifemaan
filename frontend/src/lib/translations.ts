@@ -50,6 +50,16 @@ export const translations: Record<string, Record<Language, string>> = {
     ebook: { en: "E-Book", ur: "ای بُک", hi: "ई-बुक" },
     audio: { en: "Audio", ur: "آڈیو", hi: "ऑडियो" },
     video: { en: "Video", ur: "ویڈیو", hi: "वीडियो" },
+    home: {
+        en: "Home",
+        ur: "صفحۂ اول",
+        hi: "मुखपृष्ठ"
+    },
+    PoetryAndLiterary: {
+        en: "Poetry & Literary Content Platform bringing the beauty of language to the world.",
+        ur: "زبان کی خوبصورتی کو دنیا تک پہنچانے والا شاعری اور ادبی مواد کا پلیٹ فارم۔",
+        hi: "भाषा की सुंदरता को दुनिया तक पहुँचाने वाला कविता और साहित्यिक सामग्री का मंच।"
+    },
 
     // ── Actions ──
     seeAll: { en: "See All", ur: "سب دیکھیں", hi: "सभी देखें" },

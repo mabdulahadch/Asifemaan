@@ -102,7 +102,7 @@ const Footer = () => {
                                 )}
                             </Link>
                             <p className="text-sm text-rekhta-muted max-w-sm mt-2 leading-relaxed">
-                                Poetry & Literary Content Platform bringing the beauty of language to the world.
+                                {t("PoetryAndLiterary")}
                             </p>
                         </div>
 
