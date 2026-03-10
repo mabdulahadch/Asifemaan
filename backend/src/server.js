@@ -9,6 +9,7 @@ const contentRoutes = require("./routes/contentRoutes");
 const poetRoutes = require("./routes/poetRoutes");
 const favouriteRoutes = require("./routes/favouriteRoutes");
 const settingsRoutes = require("./routes/settingsRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 
 const app = express();
@@ -23,7 +24,8 @@ app.use("/api/poets", poetRoutes);
 app.use("/api/content", contentRoutes);
 app.use("/api/favourites", favouriteRoutes);
 app.use("/api/settings", settingsRoutes);
-  
+app.use("/api/contact", contactRoutes);
+
 app.use((req, res) => {
     res.status(404).json({
         success: false,
@@ -33,6 +35,8 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, () => {});
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 module.exports = app;

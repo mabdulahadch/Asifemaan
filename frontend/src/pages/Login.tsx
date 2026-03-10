@@ -38,9 +38,13 @@ const Login = () => {
                 // Store in auth context
                 authLogin(response.data.token, user);
 
-                // Auto-detect admin: if user role is ADMIN, go to admin panel
+                // Strict admin handling
                 if (user.role === "ADMIN") {
                     navigate("/admin");
+                } else if (from.startsWith("/admin")) {
+                    // Regular user but tried to go to admin -> show error, redirect to home
+                    setError("You do not have permission to access the admin panel.");
+                    setTimeout(() => navigate("/", { replace: true }), 1500);
                 } else {
                     navigate(from, { replace: true });
                 }

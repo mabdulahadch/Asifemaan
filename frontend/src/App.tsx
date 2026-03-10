@@ -27,6 +27,7 @@ import GhazalDetailView from "./pages/user/sections/GhazalDetailView";
 import SherDetailView from "./pages/user/sections/SherDetailView";
 import NazmDetailView from "./pages/user/sections/NazmDetailView";
 import EBookDetailView from "./pages/user/sections/EBookDetailView";
+import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,7 @@ const App = () => (
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer/>
           </BrowserRouter>
         </LanguageProvider>
       </AuthProvider>

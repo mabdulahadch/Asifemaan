@@ -86,6 +86,11 @@ const AdminContent = () => {
             try {
                 const res = await AdminService.getPoets();
                 setPoets(res.data);
+                if (res.data && res.data.length > 0) {
+                    const firstPoetId = String(res.data[0].id);
+                    setSelectedPoetId(firstPoetId);
+                    fetchContent(firstPoetId);
+                }
             } catch {
                 setError("Failed to load poets.");
             } finally {
@@ -93,6 +98,7 @@ const AdminContent = () => {
             }
         };
         fetchPoets();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Fetch content when poet changes
@@ -253,14 +259,16 @@ const AdminContent = () => {
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
-                <div>
-                    <h2 className="text-2xl font-bold text-foreground">Content</h2>
-                    <p className="text-sm text-muted-foreground">Select a poet to manage their content</p>
-                </div>
+               
                 {selectedPoetId && (
+                    <>
+                    <div>
+                    <h2 className="text-2xl font-bold text-foreground">Edit Content</h2>
+                    </div>
+                    
                     <Button onClick={openCreate}>
                         <Plus className="h-4 w-4 mr-2" /> Add Content
-                    </Button>
+                    </Button></>
                 )}
             </div>
 
@@ -270,29 +278,7 @@ const AdminContent = () => {
                 </Alert>
             )}
 
-            {/* Poet Selector */}
-            <Card>
-                <CardContent className="pt-6">
-                    <div className="max-w-sm space-y-2">
-                        <Label>Select Poet</Label>
-                        <Select
-                            value={selectedPoetId}
-                            onValueChange={handlePoetSelect}
-                        >
-                            <SelectTrigger>
-                                <SelectValue placeholder={poetsLoading ? "Loading poets..." : "Choose a poet"} />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {poets.map((p) => (
-                                    <SelectItem key={p.id} value={String(p.id)}>
-                                        {p.realName} {p.penName ? `(${p.penName})` : ""}
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </CardContent>
-            </Card>
+
 
             {/* Content per type */}
             {loading ? (

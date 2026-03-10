@@ -15,6 +15,7 @@ $routes = [
     '/api/content' => __DIR__ . '/api/content.php',
     '/api/favourites' => __DIR__ . '/api/favourites.php',
     '/api/settings' => __DIR__ . '/api/settings.php',
+    '/api/contact' => __DIR__ . '/api/contact.php',
 ];
 
 foreach ($routes as $prefix => $file) {

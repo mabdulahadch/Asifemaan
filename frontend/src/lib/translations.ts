@@ -101,6 +101,17 @@ export const translations: Record<string, Record<Language, string>> = {
 
     // ── Footer ──
     allRightsReserved: { en: "All rights reserved.", ur: "جملہ حقوق محفوظ ہیں۔", hi: "सर्वाधिकार सुरक्षित।" },
+    writeToUs: { en: "Write to Us", ur: "ہمیں لکھیں", hi: "हमें लिखें" },
+    writeToUsSub: { en: "We would love to hear from you.", ur: "ہمیں آپ سے سننا پسند آئے گا۔", hi: "स्थानीय संदेश" },
+    nameField: { en: "Name", ur: "نام", hi: "नाम" },
+    emailField: { en: "Email", ur: "ای میل", hi: "ईमेल" },
+    countryField: { en: "Country", ur: "ملک", hi: "देश" },
+    messageField: { en: "Your Message...", ur: "آپ کا پیغام...", hi: "आपका संदेश..." },
+    sendMessage: { en: "Send Message", ur: "پیغام بھیجیں", hi: "संदेश भेजें" },
+    messageSentTitle: { en: "Message Sent", ur: "پیغام بھیج دیا گیا", hi: "संदेश भेजा गया" },
+    messageSentDesc: { en: "Your message has been sent successfully.", ur: "آپ کا پیغام کامیابی سے بھیجا جا چکا ہے۔", hi: "आपका संदेश सफलतापूर्वक भेजा गया है।" },
+    errorTitle: { en: "Error", ur: "غلطی", hi: "त्रुटि" },
+    errorDesc: { en: "An unexpected error occurred. Please try again later.", ur: "ایک غیر متوقع خرابی پیش آگئی۔ براہ کرم بعد میں دوبارہ کوشش کریں۔", hi: "त्रुटि हुई।" },
 
     // ── Share Dialog ──
     linkCopied: { en: "Link copied to clipboard!", ur: "لنک کاپی ہو گیا!", hi: "लिंक कॉपी हो गया!" },
@@ -151,6 +162,16 @@ export const translations: Record<string, Record<Language, string>> = {
     },
 };
 
+// Maps specific hardcoded transliterations
+const customTransliterations: Record<string, string> = {
+    "آصف ایمان": "Asifemaan",
+    "ایمان": "Emaan"
+};
+
 export const getTranslation = (key: string, language: Language): string => {
-    return translations[key]?.[language] ?? translations[key]?.en ?? key;
+    // If exact match in custom transliterations exists, return it when translating to english or if requested directly
+    if (language === 'en' && customTransliterations[key]) {
+        return customTransliterations[key];
+    }
+    return translations[key]?.[language] ?? translations[key]?.en ?? customTransliterations[key] ?? key;
 };

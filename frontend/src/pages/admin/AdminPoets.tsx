@@ -189,7 +189,7 @@ const AdminPoets = () => {
                     </div>
                 </div>
             )}
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold text-foreground">Poets</h2>
                     <p className="text-sm text-muted-foreground">Manage your poets collection</p>
@@ -197,7 +197,7 @@ const AdminPoets = () => {
                 <Button onClick={openCreate} disabled={saving}>
                     <Plus className="h-4 w-4 mr-2" /> Add Poet
                 </Button>
-            </div>
+            </div> */}
 
             {error && (
                 <Alert variant="destructive">

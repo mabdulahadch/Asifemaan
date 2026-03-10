@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation, Outlet } from "react-router-dom";
 import TopNavBar from "@/pages/user/poetdetail/TopNavBar";
-import Footer from "@/components/Footer";
 import PoetHeroBanner from "@/pages/user/poetdetail/PoetHeroBanner";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { PoetService, Poet } from "@/lib/api/poets";
 import { Loader2 } from "lucide-react";
 import RightSidebar from "@/components/RightSidebar";
+import Footer from "@/components/Footer";
 
 const PoetProfile = () => {
   const { id } = useParams();

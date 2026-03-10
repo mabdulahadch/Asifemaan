@@ -188,6 +188,12 @@ function isRoman(text: string): boolean {
 export function transliterate(text: string, targetLang: Language): string {
     if (!text) return text;
 
+    if (targetLang === "en") {
+        const exactMatch = text.trim();
+        if (exactMatch === "آصف ایمان") return "Asifemaan";
+        if (exactMatch === "ایمان") return "Emaan";
+    }
+
     if (isRoman(text)) {
         if (targetLang === "en") return text;
         if (targetLang === "ur") return romanToUrdu(text);

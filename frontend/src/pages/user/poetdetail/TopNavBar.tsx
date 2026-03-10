@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Language } from "@/lib/translations";
 import { ContentService } from "@/lib/api/content";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { HomeService } from "@/lib/api/home";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,13 +51,14 @@ const TopNavBar = () => {
     // Fetch global settings for logo
     const fetchSettings = async () => {
       try {
-        // We can just use standard fetch since there's no dedicated general service yet,
-        // or re-use any existing configured axios instance.
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/settings`);
-        const json = await res.json();
-        if (json.success && json.data?.logo) {
-          setLogoUrl(json.data.logo);
-        }
+        HomeService.getSettings()
+          .then(res => {
+            if (res && res.data) {
+              setLogoUrl(res.data.logo);
+            }
+          })
+          .catch(err => console.error("Failed to load logo", err));
+
       } catch (err) {
         console.error("Failed to fetch settings for logo", err);
       }
@@ -96,12 +98,16 @@ const TopNavBar = () => {
     { id: "video", path: "video", key: "video", count: counts.video },
   ];
 
+  const handleScrollTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm flex flex-col w-full">
       <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4">
         {/* Logo */}
         <div className="flex-shrink-0 flex items-center">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" onClick={handleScrollTop} className="flex items-center gap-2">
             {logoUrl ? (
               <img
                 src={logoUrl}
@@ -127,6 +133,7 @@ const TopNavBar = () => {
                   <Link
                     key={tab.id}
                     to={`/poet/${id}/${tab.path}`}
+                    onClick={handleScrollTop}
                     className={`relative shrink-0 px-4 py-4 text-sm transition-colors flex items-center ${activeTab === tab.id
                       ? "text-rekhta-gold font-semibold"
                       : "text-rekhta-gold"

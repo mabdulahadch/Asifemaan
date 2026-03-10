@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { BookOpen, Users, LogOut, Home, Settings } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { HomeService } from "@/lib/api/home"
 
 const navItems = [
     { to: "/admin/profile", label: "Profile", icon: Users },
@@ -16,11 +17,13 @@ const AdminLayout = () => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/settings`);
-                const json = await res.json();
-                if (json.success && json.data?.logo) {
-                    setLogoUrl(json.data.logo);
-                }
+                HomeService.getSettings()
+                    .then(res => {
+                        if (res && res.data) {
+                            setLogoUrl(res.data.logo);
+                        }
+                    })
+                    .catch(err => console.error("Failed to load logo", err));
             } catch (err) {
                 console.error("Failed to fetch settings for admin logo", err);
             }

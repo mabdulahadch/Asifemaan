@@ -5,8 +5,6 @@ import FeaturedEbooks from "@/pages/user/home/FeaturedEbooks";
 import FeaturedVideo from "@/pages/user/home/FeaturedVideo";
 import FeaturedAudio from "@/pages/user/home/FeaturedAudio";
 
-import Footer from "@/components/Footer";
-
 const Home = () => {
 
     return (
@@ -36,7 +34,7 @@ const Home = () => {
                 <FeaturedVideo />
             </div>
 
-            <Footer />
+            {/* <Footer /> */}
         </div>
     );
 };
